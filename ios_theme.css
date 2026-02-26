@@ -1,0 +1,184 @@
+/* --- iOS NOTES THEME (APPLE STYLE) --- */
+.sheet-notas.ios-notes-theme {
+    background-color: #000;
+    color: white;
+    display: flex;
+    flex-direction: column;
+}
+
+.ios-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    height: auto;
+}
+
+.ios-heading {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 2.2rem;
+    color: white;
+    margin: 0;
+}
+
+.ios-save-btn {
+    background: #bf5af2;
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+.ios-toolbar-wrapper {
+    padding: 10px 20px;
+}
+
+.ios-toolbar {
+    background: rgba(40, 40, 40, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 15px;
+    padding: 10px 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.tool-group {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.ios-divider {
+    width: 1px;
+    height: 20px;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.ios-btn-tool {
+    background: none;
+    border: none;
+    color: #aaa;
+    font-size: 1.1rem;
+    cursor: pointer;
+    padding: 5px;
+    transition: 0.2s;
+}
+
+.ios-btn-tool:hover {
+    color: white;
+}
+
+.ios-btn-tool.bold {
+    font-weight: 900;
+    font-family: sans-serif;
+}
+
+.ios-btn-tool.italic {
+    font-style: italic;
+    font-family: serif;
+}
+
+.ios-btn-tool.underline {
+    text-decoration: underline;
+    font-family: sans-serif;
+}
+
+.tool-group.colors {
+    gap: 10px;
+}
+
+.color-dot {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.color-dot:hover {
+    transform: scale(1.1);
+}
+
+.color-dot.yellow {
+    background: #f1c40f;
+}
+
+.color-dot.red {
+    background: #e74c3c;
+}
+
+.color-dot.blue {
+    background: #3498db;
+}
+
+.ios-content-area {
+    padding: 10px 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+.ios-input-title {
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 1.8rem;
+    font-weight: 700;
+    font-family: 'Montserrat', sans-serif;
+    margin-bottom: 15px;
+    width: 100%;
+    outline: none;
+}
+
+.ios-input-title::placeholder {
+    color: #555;
+}
+
+.ios-textarea {
+    background: transparent;
+    border: none;
+    color: #ddd;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    width: 100%;
+    resize: none;
+    outline: none;
+    flex: 1;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    min-height: 300px;
+}
+
+.ios-textarea::placeholder {
+    color: #444;
+}
+
+/* Missing Canvas Styles (just in case app.js needs them or user adds it back) */
+#contenedor-canvas-nota {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    z-index: 50;
+    pointer-events: none;
+    /* Allow click through unless drawing */
+}
+
+#contenedor-canvas-nota canvas {
+    pointer-events: auto;
+}
+
+.hidden {
+    display: none !important;
+}

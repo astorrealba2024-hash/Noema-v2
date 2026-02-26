@@ -1,0 +1,16 @@
+{
+  "name": "Nôema",
+  "short_name": "Nôema",
+  "description": "Comprende la Palabra - Biblia + IA",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#1a1a1a",
+  "theme_color": "#8e44ad",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}

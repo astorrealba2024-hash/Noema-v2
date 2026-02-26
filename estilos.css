@@ -1,0 +1,4730 @@
+﻿/* =========================================
+   VARIABLES PREMIUM UI (CLARO / OSCURO)
+   ========================================= */
+:root {
+    /* MODO CLARO (Default) */
+    --bg-ui: #f2f4f8;
+    /* Fondo global mÃ¡s limpio */
+    --card-bg-ui: rgba(255, 255, 255, 0.75);
+    /* Transparencia Glassmorphism */
+    --text-ui: #1c1c1e;
+    /* Texto casi negro */
+    --text-sec-ui: #6c6c70;
+    /* Texto secundario gris */
+    --border-ui: rgba(0, 0, 0, 0.05);
+    --shadow-ui: 0 8px 30px rgba(0, 0, 0, 0.08);
+    --nav-bg-ui: rgba(255, 255, 255, 0.85);
+    --timeline-line-ui: linear-gradient(to bottom, #d1d1d6 50%, rgba(255, 255, 255, 0) 0%);
+    --timeline-node-border: #d1d1d6;
+    --blur-ui: blur(20px);
+}
+
+body.dark {
+    /* MODO OSCURO */
+    --bg-ui: #121212;
+    --card-bg-ui: rgba(44, 44, 46, 0.70);
+    --text-ui: #ffffff;
+    --text-sec-ui: #ebebf5;
+    --border-ui: rgba(255, 255, 255, 0.1);
+    --shadow-ui: 0 10px 30px rgba(0, 0, 0, 0.4);
+    --nav-bg-ui: rgba(26, 26, 26, 0.9);
+    --timeline-line-ui: linear-gradient(to bottom, #48484a 50%, rgba(0, 0, 0, 0) 0%);
+    --timeline-node-border: #636366;
+}
+
+/* =========================================
+   7. NUEVO UI OVERHAUL (CORRECCIONES)
+   ========================================= */
+
+/* CONTENEDOR PRINCIPAL */
+.dashboard-container {
+    padding: 0 20px 100px 20px;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* HEADER SUPERIOR (Con línea separadora) */
+.dashboard-top-bar {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 15px;
+    
+    /* AJUSTES PARA LA LÍNEA */
+    padding: 15px 0 15px 0;       /* Más espacio interno antes de la línea */
+    border-bottom: 1px solid var(--border-ui); /* La línea delgada */
+    margin-bottom: 20px;          /* Espacio externo para separar la tarjeta de saludo */
+}
+
+/* Forzar prioridades para el avatar */
+.avatar-header {
+    width: 35px !important;
+    height: 35px !important;
+    border-radius: 50% !important;
+    border: 1px solid var(--border);
+    object-fit: cover;
+    display: block;
+    background: #222;
+}
+
+/* =========================================
+   TARJETA PRINCIPAL (Premium Violet Glow)
+   ========================================= */
+.card-dashboard-main {
+    /* 1. ANCHO Y ALTO (MANTENIDO EXACTO) */
+    margin-left: -20px; 
+    margin-right: -20px;
+    width: calc(100% + 40px);
+    min-height: 200px; 
+    
+    /* 2. FONDO PREMIUM MULTICAPA */
+    background: 
+        radial-gradient(ellipse at 20% 30%, rgba(139, 92, 246, 0.3) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 70%, rgba(124, 58, 237, 0.2) 0%, transparent 50%),
+        linear-gradient(145deg, rgba(76, 29, 149, 0.9) 0%, rgba(30, 27, 75, 0.95) 50%, rgba(17, 24, 39, 0.98) 100%) !important;
+    
+    /* 3. EFECTO CRISTAL */
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    
+    /* 4. BORDE PREMIUM SUTIL */
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.2) !important; 
+    
+    /* Sombra multicapa con glow violeta */
+    box-shadow: 
+        0 15px 30px rgba(0, 0, 0, 0.3),
+        0 0 0 1px rgba(139, 92, 246, 0.1),
+        0 0 20px rgba(139, 92, 246, 0.1);
+    
+    /* Centrado del contenido */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    
+    /* Estética de la caja (MANTENIDO EXACTO) */
+    border-radius: 28px; 
+    padding: 30px 25px; 
+    margin-bottom: 25px;
+    margin-top: 10px;
+    
+    position: relative;
+    overflow: hidden;
+    
+    /* ANIMACIÓN PREMIUM */
+    animation: violetPulse 5s ease-in-out infinite;
+}
+
+/* Destello de luz violeta */
+.card-dashboard-main::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(
+        circle at center,
+        rgba(167, 139, 250, 0.4) 0%,
+        rgba(139, 92, 246, 0.2) 30%,
+        transparent 60%
+    );
+    animation: lightSweep 5s ease-in-out infinite;
+    pointer-events: none;
+    opacity: 0;
+}
+
+/* Línea brillante superior */
+.card-dashboard-main::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 40%;
+    height: 1px;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(167, 139, 250, 0.8),
+        rgba(255, 255, 255, 0.6),
+        transparent
+    );
+    animation: topShine 5s ease-in-out infinite;
+    filter: blur(0.5px);
+}
+
+/* Animación: Pulso de brillo en sombras */
+@keyframes violetPulse {
+    0%, 100% {
+        box-shadow: 
+            0 15px 30px rgba(0, 0, 0, 0.3),
+            0 0 0 1px rgba(139, 92, 246, 0.1),
+            0 0 20px rgba(139, 92, 246, 0.1);
+    }
+    50% {
+        box-shadow: 
+            0 15px 30px rgba(0, 0, 0, 0.3),
+            0 0 0 1px rgba(139, 92, 246, 0.3),
+            0 0 40px rgba(139, 92, 246, 0.25),
+            0 0 60px rgba(139, 92, 246, 0.15);
+    }
+}
+
+/* Animación: Barrido de luz */
+@keyframes lightSweep {
+    0%, 100% {
+        transform: translate(-20%, -20%) scale(0.9);
+        opacity: 0;
+    }
+    50% {
+        transform: translate(5%, 5%) scale(1.1);
+        opacity: 0.8;
+    }
+}
+
+/* Animación: Línea brillante */
+@keyframes topShine {
+    0%, 90%, 100% {
+        left: -100%;
+        opacity: 0;
+    }
+    45% {
+        left: 150%;
+        opacity: 1;
+    }
+}
+
+/* Título: BLANCO CON DEGRADADO SUTIL */
+.card-dashboard-main h1 {
+    font-size: 1.8rem;
+    font-weight: 900;
+    margin: 0 0 15px 0;
+    letter-spacing: -0.5px;
+    line-height: 1.1;
+    
+    /* Degradado de texto premium */
+    background: linear-gradient(135deg, #ffffff 0%, #e9d5ff 50%, #ffffff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+    position: relative;
+    z-index: 1;
+}
+
+/* Subtítulo: BLANCO VIOLETA TRANSPARENTE */
+.card-dashboard-main p {
+    font-size: 1rem;
+    margin: 0;
+    font-weight: 500;
+    line-height: 1.5;
+    max-width: 90%;
+    color: rgba(233, 213, 255, 0.9) !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    position: relative;
+    z-index: 1;
+}
+
+
+/* GRID PARA TIMELINE Y CONTENIDO (Solo para las 3 tarjetas) */
+.timeline-grid {
+    display: grid;
+    grid-template-columns: 30px 1fr;
+    /* Columna timeline angosta + Contenido */
+    gap: 15px;
+}
+
+/* TIMELINE (IZQUIERDA) */
+.timeline-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    padding-top: 25px;
+    /* Ajuste para alinear con el centro visual de la primera tarjeta */
+}
+
+.timeline-line {
+    position: absolute;
+    top: 30px;
+    bottom: 0;
+    /* Hasta el final de la columna */
+    width: 2px;
+    background-image: var(--timeline-line-ui);
+    background-position: center;
+    background-size: 2px 8px;
+    background-repeat: repeat-y;
+    opacity: 0.5;
+    z-index: 0;
+}
+
+
+
+.timeline-node {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid var(--timeline-node-border);
+    background: var(--bg-ui);
+    /* Corta la lÃ­nea visualmente */
+    z-index: 1;
+    margin-bottom: 20px;
+    /* Base */
+    flex-shrink: 0;
+}
+
+/* AlineaciÃ³n manual de nodos con tarjetas */
+/* Nodo Pan Diario */
+.node-1 {
+    margin-bottom: 175px;
+    
+    /* Mantenemos el borde del color de los otros nodos o lo forzamos a violeta si los otros son violetas */
+    border-color: #8e44ad !important;
+    
+    /* ¡Sin rellenar el fondo! Solo la sombra brillante hacia afuera */
+    box-shadow:
+        0 0 8px rgba(142, 68, 173, 0.8),
+        0 0 15px rgba(142, 68, 173, 0.5),
+        0 0 25px rgba(142, 68, 173, 0.3) !important;
+    
+    /* Aseguramos que el centro siga transparente/hueco como los demás */
+    background-color: transparent !important;
+}
+
+/* Nodo ReflexiÃ³n */
+.node-2 {
+    margin-bottom: 150px;
+}
+
+/* Nodo OraciÃ³n */
+.node-3 {
+    margin-bottom: 0;
+}
+
+
+/* SECCION PAN DIARIO (Espaciado Ajustado) */
+.content-col {
+    display: flex;
+    flex-direction: column;
+    gap: 12px !important; /* Espacio reducido entre tarjetas */
+    padding-left: 10px;
+    overflow: visible;
+}
+
+.section-title {
+    font-size: 1rem;
+    font-weight: 800;
+    margin: 0 0 10px 0;
+    /* AnimaciÃ³n Bucle 8s */
+    animation: textPulse 8s infinite ease-in-out;
+}
+
+/* TARJETA VERSICULO (Sin margen extra) */
+.card-verse-day {
+    background: var(--card-bg-ui);
+    backdrop-filter: var(--blur-ui);
+    -webkit-backdrop-filter: var(--blur-ui);
+    border-radius: 20px;
+    padding: 25px;
+    color: var(--text-ui);
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--shadow-ui);
+    border: 1px solid var(--border-ui);
+    
+    margin-bottom: 0 !important; /* IMPORTANTE: Quitamos margen */
+    
+    /* Mantenemos el diseño asimétrico */
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    margin-right: -25px;
+    padding-right: 40px;
+}
+
+.card-verse-day h3 {
+    margin: 0 0 10px 0;
+    font-size: 1.1rem;
+    font-weight: 800;
+}
+
+.card-verse-day p {
+    font-size: 0.95rem;
+    line-height: 1.5;
+    opacity: 0.9;
+    margin: 0;
+}
+
+.verse-text-anim {
+    /* AnimaciÃ³n Bucle 8s - Desfase ligero */
+    animation: textFadeSlide 8s infinite ease-in-out;
+    animation-delay: 1s;
+    /* Empieza un poco despuÃ©s del tÃ­tulo */
+}
+
+.btn-share-verse {
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    color: white;
+    opacity: 0.7;
+    cursor: pointer;
+}
+
+/* TARJETA REFLEXION (Sin margen extra) */
+.card-reflection {
+    background: var(--card-bg-ui);
+    backdrop-filter: var(--blur-ui);
+    -webkit-backdrop-filter: var(--blur-ui);
+    border-radius: 20px;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--text-ui);
+    box-shadow: var(--shadow-ui);
+    height: 110px;
+    border: 1px solid var(--border-ui);
+    
+    margin-bottom: 0 !important; /* IMPORTANTE: Quitamos margen */
+}
+
+.reflection-info {
+    flex: 1;
+    padding-right: 15px;
+}
+
+.reflection-info h4 {
+    margin: 0 0 5px 0;
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.reflection-info p {
+    font-size: 0.8rem;
+    opacity: 0.7;
+    margin: 0 0 15px 0;
+}
+
+.time-tag {
+    font-size: 0.7rem;
+    color: var(--text-sec-ui);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.reflection-img {
+    width: 80px;
+    height: 80px;
+    border-radius: 12px;
+    object-fit: cover;
+    background: #111;
+}
+
+/* BANNER KERYGMA (KERYGMA) */
+.banner-kerygma {
+    width: 100%;
+    height: 140px;
+    border-radius: 25px;
+    background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1469334031218-e382a71b716b?auto=format&fit=crop&q=80&w=1000');
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+}
+
+.banner-kerygma::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+    border-radius: 0 0 25px 25px;
+}
+
+.kerygma-logo-text {
+    font-family: 'Cinzel', serif;
+    font-size: 1.8rem;
+    font-weight: 900;
+    color: white;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    z-index: 2;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+/* ANIMACIONES */
+/* AnimaciÃ³n que desvanece al final para cambio de texto suave */
+@keyframes textPulse {
+    0% {
+        opacity: 0;
+        transform: translateY(-2px);
+    }
+
+    10% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    90% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(2px);
+    }
+}
+
+@keyframes textFadeSlide {
+
+    0%,
+    85%,
+    100% {
+        opacity: 0.9;
+        transform: translateY(0);
+    }
+
+    92% {
+        opacity: 0.4;
+        transform: translateY(2px);
+    }
+}
+
+/* BOTTOM NAVIGATION (CORREGIDO) */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 70px;
+    /* Un poco mÃ¡s compacta */
+    background: var(--nav-bg-ui);
+    backdrop-filter: var(--blur-ui);
+    -webkit-backdrop-filter: var(--blur-ui);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    /* Centrado vertical perfecto */
+    padding-bottom: 20px;
+    border-top: 1px solid var(--border-ui);
+    z-index: 20000;
+}
+
+body:not(.dark) .bottom-nav {
+    background: var(--nav-bg-ui);
+    border-top: 1px solid var(--border-ui);
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    color: #666;
+    /* Gris inactivo */
+    font-size: 0.7rem;
+    font-weight: 500;
+    gap: 4px;
+    padding: 0;
+    width: 25%;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.nav-item svg {
+    width: 22px;
+    height: 22px;
+    stroke-width: 2;
+    transition: stroke 0.3s;
+}
+
+/* ESTADO ACTIVO */
+.nav-item.active {
+    color: white;
+}
+
+body:not(.dark) .nav-item.active {
+    color: black;
+}
+
+.nav-item.active svg {
+    stroke: white;
+}
+
+/* BOTÃ“N NOEMA INTEGRADO (Sin flotar) */
+.nav-item.noema-btn-nav {
+    /* Mismos estilos base, solo color especial si se desea */
+}
+
+.nav-item.noema-btn-nav span.n-icon {
+    font-size: 1.2rem;
+    font-weight: 900;
+    margin-bottom: -2px;
+}
+
+
+/* =========================================
+   1. VARIABLES Y BASE (MODO PREMIUM)
+   ========================================= */
+:root {
+    --bg: #f4f4f9;
+    --card: #ffffff;
+    --text: #333333;
+    --primary: #8e44ad;
+    --accent: #27ae60;
+    --border: #e0e0e0;
+    --shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    --safe-area: env(safe-area-inset-bottom);
+
+    /* VARIABLES DE ESCALA */
+    --ui-scale: 1;
+    /* Escala general (si la usas en otros lados) */
+    --bar-scale: 1;
+    /* <--- ESTA ES LA QUE MUEVE LA BARRA */
+}
+
+body.dark {
+    --bg: #000000;
+    --card: #121212;
+    --text: #eeeeee;
+    --border: #333333;
+    --shadow: 0 4px 15px rgba(255, 255, 255, 0.05);
+}
+
+* {
+    box-sizing: border-box;
+    tap-highlight-color: transparent;
+}
+
+html,
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg-ui);
+    color: var(--text-ui);
+    overflow-x: hidden;
+    /* Bloqueo total de Pull-to-Refresh y rebotes */
+    overscroll-behavior: none;
+    overscroll-behavior-y: none;
+    height: 100%;
+    width: 100%;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* =========================================
+   2. SISTEMA DE VISTAS
+   ========================================= */
+.vista {
+    display: none;
+    width: 100%;
+    min-height: 100vh;
+    background: var(--bg);
+    padding-bottom: 120px;
+    /* Espacio extra para que no se corte el final */
+    animation: fadeIn 0.3s ease;
+}
+
+.vista.activa {
+    display: block !important;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    
+    to {
+        opacity: 1;
+    }
+}
+
+.centro-vertical {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    text-align: center;
+    padding: 20px;
+}
+
+/* MARCA Y SETUP */
+.marca-noema {
+    font-size: 3.5rem;
+    font-weight: 900;
+    letter-spacing: -2px;
+    margin: 0;
+    background: linear-gradient(135deg, var(--primary) 0%, #333 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-transform: uppercase;
+}
+
+body.dark .marca-noema {
+    background: linear-gradient(135deg, #fff 0%, #aaa 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.slogan-noema {
+    font-size: 1rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text);
+    opacity: 0.6;
+    margin-top: 10px;
+    font-weight: 600;
+}
+
+.fade-in-up {
+    animation: fadeInUp 0.8s ease forwards;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* =========================================
+   3. DASHBOARD (INICIO)
+   ========================================= */
+.header-inicio {
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.avatar-mini {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--primary);
+    cursor: pointer;
+}
+
+.contenedor-principal {
+    padding: 0 20px;
+}
+
+.saludo-container h2 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.fecha-hoy {
+    font-size: 0.9rem;
+    opacity: 0.6;
+    margin-bottom: 25px;
+}
+
+/* Tarjeta destacada del devocional */
+.card-featured {
+    width: 100%;
+    height: 220px;
+    border-radius: 24px;
+    background-color: var(--primary);
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: flex-end;
+    padding: 25px;
+    margin-bottom: 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    color: white;
+    cursor: pointer;
+    overflow: hidden;
+    position: relative;
+}
+
+.card-content {
+    position: relative;
+    z-index: 2;
+    text-align: left;
+}
+
+.card-content h3 {
+    font-size: 1.4rem;
+    margin: 10px 0 5px 0;
+    font-weight: 800;
+}
+
+.card-content p {
+    font-size: 0.9rem;
+    opacity: 0.9;
+    margin: 0;
+}
+
+.tag-dia {
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    font-weight: 800;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 4px 10px;
+    border-radius: 8px;
+    backdrop-filter: blur(5px);
+}
+
+.grid-moderno {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.card-shortcut {
+    background: var(--card);
+    padding: 25px;
+    border-radius: 20px;
+    text-align: center;
+    border: 1px solid var(--border);
+    transition: transform 0.2s ease;
+}
+
+.card-shortcut:active {
+    transform: scale(0.95);
+}
+
+.icon-m {
+    font-size: 1.5rem;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.card-shortcut p {
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+/* =========================================
+   4. LECTOR BÃBLICO (HEADER TIPO ISLA - BLINDADO)
+   ========================================= */
+.header-isla-container {
+    position: sticky;
+    top: 0;
+    z-index: 10000;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    padding: 0;
+    pointer-events: none;
+}
+
+.header-isla {
+    background: #1a1a1a;
+    color: white;
+
+    /* --- BLINDAJE CONTRA AJUSTES DEL SISTEMA --- */
+    -webkit-text-size-adjust: none;
+    /* iOS Safari */
+    text-size-adjust: none;
+    /* Android/Chrome */
+    touch-action: manipulation;
+    /* Evita zoom por doble toque */
+    line-height: 1;
+    /* Resetea altura de lÃ­nea del sistema */
+    /* ------------------------------------------ */
+
+    /* MEDIDAS ORIGINALES (Se mantienen intactas) */
+    padding: calc(8px * var(--bar-scale)) calc(12px * var(--bar-scale));
+    border-radius: 0 0 calc(30px * var(--bar-scale)) calc(30px * var(--bar-scale));
+
+    min-height: calc(50px * var(--bar-scale));
+    height: auto;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    width: 100%;
+    max-width: 100vw;
+    box-sizing: border-box;
+
+    gap: clamp(4px, calc(10px * var(--bar-scale)), 20px);
+
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+    pointer-events: auto;
+    border-bottom: 1px solid #2a2a2a;
+
+    transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* GRUPO IZQUIERDO (Selectores) */
+.isla-selectores {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    flex-shrink: 1;
+    overflow: hidden;
+}
+
+.pill-white {
+    background: #e0e0e0;
+    color: #000;
+    border: none;
+    padding: calc(6px * var(--bar-scale)) calc(10px * var(--bar-scale));
+    border-radius: calc(15px * var(--bar-scale));
+    font-weight: 700;
+
+    /* Usamos PX dentro de calc para ignorar REMs del sistema */
+    font-size: calc(13px * var(--bar-scale));
+
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.pill-glass {
+    background: rgba(255, 255, 255, 0.15);
+    color: #ccc;
+    border: none;
+    padding: calc(6px * var(--bar-scale)) calc(10px * var(--bar-scale));
+    border-radius: calc(15px * var(--bar-scale));
+
+    /* Usamos PX dentro de calc */
+    font-size: calc(12px * var(--bar-scale));
+    font-weight: 600;
+
+    cursor: pointer;
+    white-space: nowrap;
+    flex-shrink: 1;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+/* GRUPO DERECHO (Herramientas) */
+.isla-herramientas {
+    display: flex;
+    align-items: center;
+    flex-shrink: 1;
+    min-width: 0;
+    justify-content: flex-end;
+    gap: clamp(2px, 1.5vw, 6px);
+}
+
+.icon-tool {
+    background: transparent;
+    border: none;
+    color: #ccc;
+    width: calc(28px * var(--bar-scale));
+    height: calc(28px * var(--bar-scale));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border-radius: 50%;
+    transition: background 0.2s;
+    flex-shrink: 0;
+}
+
+.icon-tool svg {
+    width: calc(20px * var(--bar-scale));
+    height: calc(20px * var(--bar-scale));
+    /* Forzamos dimensiones mÃ­nimas para evitar colapso */
+    min-width: calc(20px * var(--bar-scale));
+    min-height: calc(20px * var(--bar-scale));
+}
+
+.icon-tool:active {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+.btn-noema-purple {
+    background: #8e44ad;
+    color: white;
+    border: none;
+    width: calc(32px * var(--bar-scale));
+    height: calc(32px * var(--bar-scale));
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 3px 8px rgba(142, 68, 173, 0.4);
+    margin-left: 3px;
+    flex-shrink: 0;
+}
+
+.btn-noema-purple span {
+    font-size: calc(6px * var(--bar-scale)) !important;
+    margin-top: -1px !important;
+    line-height: 1 !important;
+    /* Evita expansiÃ³n vertical */
+}
+
+.btn-noema-purple:active {
+    transform: scale(0.95);
+    background: #9b59b6;
+}
+
+/* Popover Ajustes (Fuentes) - Se mantiene igual */
+#ajustes-texto {
+    position: absolute;
+    top: 70px;
+    right: 15px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 15px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    z-index: 12000;
+}
+
+#ajustes-texto button {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    padding: 8px 15px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    color: var(--text);
+    min-width: 40px;
+}
+
+#area-lectura {
+    padding: 20px;
+    line-height: 1.8;
+    font-size: 1.1rem;
+}
+
+.versiculo {
+    padding: 10px;
+    border-radius: 12px;
+    margin-bottom: 4px;
+    transition: 0.2s;
+}
+
+.versiculo sup {
+    color: var(--primary);
+    font-weight: bold;
+    margin-right: 8px;
+}
+
+.versiculo.seleccionado {
+    background: rgba(142, 68, 173, 0.15);
+    border-left: 4px solid var(--primary);
+}
+
+/* =========================================
+   PANTALLA COMPLETA: SIN LATERALES Y SIN ABISMO
+   ========================================= */
+
+/* 1. ELIMINAR EL ESPACIO DE 120PX QUE CAUSABA EL HUECO ABAJO */
+#vista-biblia.vista {
+    padding-bottom: 0 !important;
+    height: 100vh !important;
+    overflow: hidden !important;
+}
+
+/* 2. ESTIRAR TEXTO A LOS BORDES (PANTALLA ANCHA) */
+#scroll-wrapper-sup {
+    padding-left: 5px !important;
+    /* Casi al borde fÃƒÂ­sico */
+    padding-right: 5px !important;
+    padding-bottom: 90px !important;
+    /* Espacio para navbar */
+    display: block !important;
+    overflow-y: auto;
+    height: 100%;
+}
+
+/* 3. TEXTO BÃƒï¿½BLICO SIN MÃƒï¿½RGENES */
+#area-lectura {
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+}
+
+.versiculo {
+    padding: 8px 5px !important;
+    margin: 0 !important;
+}
+
+/* 4. NAVEGACIÃƒâ€œN: SÃƒï¿½MBOLOS PEQUEÃƒâ€˜OS Y PEGADOS AL FINAL */
+.navegacion-caps-integrada {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 60px;
+    margin-top: 0 !important;
+    /* Pegado al ÃƒÂºltimo versÃƒÂ­culo */
+    padding-top: 10px !important;
+    padding-bottom: 20px !important;
+    /* MÃƒÂ­nimo para que no se corte con el borde del tlf */
+    background: transparent;
+    width: 100%;
+}
+
+.navegacion-caps-integrada button {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    outline: none !important;
+
+    font-size: 1.5rem !important;
+    /* PequeÃƒÂ±os y discretos */
+    color: var(--text) !important;
+    opacity: 0.3;
+
+    cursor: pointer;
+    padding: 10px 20px;
+    margin: 0;
+    line-height: 1;
+    transition: transform 0.2s ease;
+
+    width: auto !important;
+    height: auto !important;
+    border-radius: 0 !important;
+}
+
+.navegacion-caps-integrada button:active {
+    transform: scale(1.3);
+    color: var(--primary) !important;
+    opacity: 1;
+}
+
+/* =========================================
+   5. BARRA DE ACCIONES (PREMIUM - BLINDADA Y SCROLL)
+   ========================================= */
+.barra-flotante {
+    position: fixed;
+    bottom: -150px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 380px;
+    /* Ancho seguro */
+    background: #1a1a1a;
+    border-radius: 20px;
+    padding: 15px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+    z-index: 11000;
+    transition: bottom 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border: 1px solid #333;
+
+    /* BLINDAJE: Fuente base fija */
+    -webkit-text-size-adjust: none;
+    text-size-adjust: none;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+.barra-flotante.visible {
+    bottom: 30px;
+}
+
+/* --- HEADER: SCROLL HORIZONTAL --- */
+.barra-header {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    /* AlineaciÃ³n izquierda para el scroll */
+    margin-bottom: 12px;
+    gap: 15px;
+
+    /* ACTIVAR DESLIZAMIENTO */
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+
+    /* Evita que el scroll active el cambio de capÃ­tulo */
+    touch-action: pan-x;
+
+    padding-bottom: 5px;
+    scrollbar-width: none;
+}
+
+.barra-header::-webkit-scrollbar {
+    display: none;
+}
+
+/* Elementos del Header (NO ENCOGER) */
+.logo-barra,
+.colores-resaltado,
+.barra-header .btn-accion {
+    flex-shrink: 0;
+    /* Vital para que funcione el scroll */
+}
+
+.logo-barra {
+    font-family: 'Cinzel', serif;
+    color: #f1c40f;
+    font-weight: bold;
+    font-size: 13px;
+    /* PX fijo */
+    letter-spacing: 1px;
+}
+
+.colores-resaltado {
+    display: flex;
+    gap: 10px;
+    padding-right: 15px;
+    /* Margen final */
+}
+
+.punto-color {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    transition: transform 0.2s;
+}
+
+.punto-color:active {
+    transform: scale(1.2);
+}
+
+/* --- FOOTER: AGRUPADO (SOLUCIÃ“N DEL BOTÃ“N BORRAR) --- */
+.barra-footer {
+    display: flex;
+    align-items: center;
+    /* CAMBIO: Distribuye el espacio equitativamente */
+    justify-content: space-between;
+    gap: 5px;
+
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 12px;
+    width: 100%;
+}
+
+.btn-accion {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 11px;
+    /* PX fijo */
+    letter-spacing: 1px;
+    font-weight: 600;
+    cursor: pointer;
+    opacity: 0.8;
+    transition: opacity 0.2s;
+    white-space: nowrap;
+
+    /* Ãrea de toque */
+    padding: 8px 5px;
+}
+
+.btn-accion:hover {
+    opacity: 1;
+}
+
+.separador {
+    color: #444;
+    font-size: 12px;
+    margin: 0 2px;
+}
+
+.btn-borrar {
+    /* CORRECCIÃ“N: Quitamos margin-left: auto */
+    margin-left: 0;
+
+    background: white;
+    color: black;
+    border: none;
+
+    /* Tus estilos redondos originales */
+    padding: 6px 16px;
+    border-radius: 15px;
+
+    font-weight: 800;
+    font-size: 11px;
+    /* PX fijo */
+    white-space: nowrap;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+/* =========================================
+   6. ESTILOS DE SELECCIÃƒâ€œN (NUEVO)
+   ========================================= */
+
+/* A. Palabra individual (Base) */
+.palabra-tocable {
+    padding: 3px 0;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+/* B. Palabra seleccionada (AMARILLO AL TOCAR) */
+.palabra-resaltada {
+    background-color: #fdd835;
+    /* Amarillo YouVersion */
+    color: black;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+/* C. VersÃƒÂ­culo seleccionado (FONDO SUAVE) */
+.versiculo.seleccionado {
+    background-color: rgba(253, 216, 53, 0.15);
+    /* Amarillo muy suave */
+    transition: background-color 0.3s ease;
+}
+
+.versiculo,
+.palabra-tocable {
+    /* Desactiva la selecciÃƒÂ³n de texto azul */
+    -webkit-user-select: none;
+    /* Safari/Chrome mÃƒÂ³vil */
+    user-select: none;
+    /* EstÃƒÂ¡ndar */
+
+    /* Desactiva el menÃƒÂº contextual (Copiar/Compartir) nativo al mantener presionado */
+    -webkit-touch-callout: none;
+}
+
+/* =========================================
+   6. PANELES DESLIZABLES (IA & NOTAS)
+   ========================================= */
+.bottom-sheet,
+.sheet-notas {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 80vh;
+    background: var(--card);
+    border-radius: 25px 25px 0 0;
+    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.3);
+    z-index: 15000;
+    display: flex;
+    flex-direction: column;
+    transform: translateY(100%);
+    transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.bottom-sheet.abierto,
+.sheet-notas.abierto {
+    transform: translateY(0);
+}
+
+.bottom-sheet.hidden,
+.sheet-notas.hidden {
+    display: none !important;
+}
+
+.sheet-handle {
+    width: 40px;
+    height: 5px;
+    background: #ddd;
+    border-radius: 5px;
+    margin: 15px auto;
+    cursor: grab;
+}
+
+#chat-historial {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.msg {
+    padding: 12px 18px;
+    border-radius: 20px;
+    max-width: 85%;
+    line-height: 1.5;
+    font-size: 0.95rem;
+}
+
+.msg.user {
+    align-self: flex-end;
+    background: var(--primary);
+    color: white;
+    border-bottom-right-radius: 4px;
+}
+
+.k-msg-noema {
+    align-self: flex-start;
+    background: rgba(142, 68, 173, 0.1);
+    border-left: 3px solid #8e44ad;
+    color: var(--text);
+    border-bottom-left-radius: 2px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.k-msg-user {
+    align-self: flex-end;
+    background: #333;
+    color: white;
+    border-bottom-right-radius: 2px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+/* Estilos Kerygma Premium Input */
+.kerygma-input-container input:focus {
+    background: rgba(30, 30, 30, 0.95) !important;
+    border-color: #8e44ad !important;
+    box-shadow: 0 0 20px rgba(142, 68, 173, 0.4) !important;
+}
+
+
+.msg.ia {
+    align-self: flex-start;
+    background: rgba(0, 0, 0, 0.05);
+    color: var(--text);
+    border-bottom-left-radius: 4px;
+}
+
+body.dark .msg.ia {
+    background: #222;
+}
+
+.chat-input-wrapper {
+    padding: 15px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 10px;
+    background: var(--card);
+    padding-bottom: calc(15px + var(--safe-area));
+}
+
+.chat-input-wrapper input {
+    flex: 1;
+    padding: 12px 20px;
+    border-radius: 30px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--text);
+    outline: none;
+}
+
+.chat-input-wrapper button {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: white;
+    border: none;
+    font-size: 1.2rem;
+}
+
+/* PANEL NOTAS */
+.win-header {
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+}
+
+.input-notas-titulo {
+    width: 100%;
+    border: none;
+    background: rgba(0, 0, 0, 0.05);
+    padding: 12px;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--primary);
+    outline: none;
+}
+
+.btn-save {
+    background: var(--primary);
+    color: white;
+    padding: 8px 20px;
+    font-size: 0.8rem;
+    border-radius: 20px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+#nota-cuerpo {
+    flex: 1;
+    padding: 20px;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: var(--text);
+    resize: none;
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+
+/* =========================================
+   7. SIDEBAR (MENÃƒÅ¡ LATERAL)
+   ========================================= */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 14000;
+    pointer-events: none;
+}
+
+.sidebar-content {
+    position: absolute;
+    top: 0;
+    left: -85%;
+    width: 85%;
+    height: 100%;
+    background: var(--card-bg-ui);
+    backdrop-filter: var(--blur-ui);
+    -webkit-backdrop-filter: var(--blur-ui);
+    transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 25px;
+    pointer-events: auto;
+    box-shadow: 5px 0 15px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar.abierto .sidebar-content {
+    left: 0;
+}
+
+.sidebar-overlay {
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+}
+
+.sidebar.abierto .sidebar-overlay {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 30px;
+    padding: 15px;
+    background: rgba(142, 68, 173, 0.05);
+    border-radius: 20px;
+}
+
+#avatar-sidebar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--primary);
+}
+
+.sidebar-content button {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 18px;
+    margin-bottom: 12px;
+    background: var(--bg);
+    border: none;
+    border-radius: 16px;
+    color: var(--text);
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.sidebar-content button::before {
+    margin-right: 15px;
+    font-size: 1.3rem;
+}
+
+.btn-noche::before {
+    content: "Ã°Å¸Å’â„¢";
+}
+
+.btn-resaltados::before {
+    content: "Ã°Å¸â€“ï¿½Ã¯Â¸ï¿½";
+}
+
+.btn-historial::before {
+    content: "Ã°Å¸â€¢â€™";
+}
+
+.btn-notas::before {
+    content: "Ã°Å¸â€œï¿½";
+}
+
+/* =========================================
+   8. MODALES Y UTILIDADES
+   ========================================= */
+#overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    z-index: 10500;
+    /* Debajo de la barra premium pero encima del texto */
+    display: none;
+}
+
+#overlay:not(.hidden) {
+    display: block;
+}
+
+.hidden {
+    display: none !important;
+    pointer-events: none;
+}
+
+.modal-full {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--card);
+    z-index: 16000;
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-centro {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 17000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.card-modal {
+    background: var(--card-bg-ui);
+    backdrop-filter: var(--blur-ui);
+    -webkit-backdrop-filter: var(--blur-ui);
+    padding: 25px;
+    border-radius: 28px;
+    width: 85%;
+    max-width: 360px;
+    text-align: center;
+    border: 1px solid var(--border-ui);
+    box-shadow: var(--shadow-ui);
+}
+
+.input-grande {
+    padding: 15px;
+    border-radius: 18px;
+    border: 1px solid var(--border);
+    width: 80%;
+    margin: 20px 0;
+    text-align: center;
+    font-size: 1.1rem;
+    background: var(--card);
+    color: var(--text);
+    outline: none;
+}
+
+.btn-primary {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 15px;
+    border-radius: 30px;
+    font-weight: bold;
+    width: 100%;
+    cursor: pointer;
+}
+
+/* Selector */
+.lista-items {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    padding: 20px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.item-seleccion {
+    aspect-ratio: 1/1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    color: var(--text);
+    font-weight: 700;
+}
+
+.item-seleccion:active {
+    transform: scale(0.9);
+    background: var(--primary);
+    color: white;
+}
+
+.selector-tabs {
+    display: flex;
+    justify-content: space-around;
+    background: rgba(0, 0, 0, 0.05);
+    margin: 15px 20px;
+    padding: 5px;
+    border-radius: 14px;
+}
+
+.tab {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    background: transparent;
+    color: var(--text);
+    font-weight: 800;
+    border-radius: 10px;
+    transition: 0.3s;
+}
+
+.tab.active {
+    background: var(--card);
+    color: var(--primary);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.header-modal-premium {
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+}
+
+/* Devocional */
+#contenido-devocional {
+    padding: 20px;
+    background: var(--bg);
+}
+
+.dev-card {
+    background: var(--card-bg-ui);
+    backdrop-filter: var(--blur-ui);
+    -webkit-backdrop-filter: var(--blur-ui);
+    border-radius: 30px;
+    padding: 30px 25px;
+    box-shadow: var(--shadow-ui);
+    text-align: center;
+    border: 1px solid var(--border-ui);
+    margin-bottom: 80px;
+}
+
+.dev-icono {
+    font-size: 3rem;
+    display: block;
+    margin-bottom: 15px;
+    animation: flotar 3s ease-in-out infinite;
+}
+
+.dev-titulo {
+    font-size: 1.6rem;
+    font-weight: 800;
+    margin: 10px 0 20px 0;
+}
+
+.dev-verso {
+    background: var(--bg);
+    padding: 20px;
+    border-radius: 20px;
+    font-style: italic;
+    border: 1px dashed var(--primary);
+}
+
+@keyframes flotar {
+    0% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+/* Editor de Recorte */
+.crop-container {
+    box-shadow: 0 0 0 100vw rgba(0, 0, 0, 0.8);
+    touch-action: none;
+    user-select: none;
+}
+
+#canvas-crop {
+    display: block;
+    width: 280px;
+    height: 280px;
+}
+
+/* =========================================
+   NUEVAS FUNCIONES: KERYGMA & CONFIG
+   ========================================= */
+
+/* Escenario y Chat de Kerygma */
+#kerygma-stage {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+#kerygma-chat-area {
+    scroll-behavior: smooth;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* Burbujas del Mentor Kerygma */
+.k-bubble {
+    padding: 12px 16px;
+    border-radius: 18px;
+    max-width: 85%;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    box-shadow: var(--shadow);
+}
+
+.k-noema-msg {
+    background: rgba(142, 68, 173, 0.1);
+    border-left: 4px solid var(--primary);
+    color: var(--text);
+    align-self: flex-start;
+}
+
+/* CONTENEDOR PARA CENTRAR EL ZOOM - CORRECCIÃƒâ€œN RADICAL */
+.config-zoom-container {
+    display: flex !important;
+    justify-content: center !important;
+    /* Centra horizontalmente */
+    align-items: center !important;
+    /* Centra verticalmente */
+    gap: 20px !important;
+    /* Espacio entre botones y nÃƒÂºmero */
+    width: 100% !important;
+    /* Obliga a ocupar todo el ancho */
+    margin: 25px 0 !important;
+    /* Separa el control de los otros botones */
+    padding: 0 !important;
+    float: none !important;
+    /* Elimina cualquier empuje lateral */
+}
+
+/* Estilo para los botones de Zoom */
+.btn-zoom {
+    width: 50px !important;
+    height: 50px !important;
+    border-radius: 50% !important;
+    border: 1px solid var(--border) !important;
+    background: var(--card) !important;
+    color: var(--text) !important;
+    font-size: 1.5rem !important;
+    font-weight: bold;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+    transition: all 0.2s ease;
+}
+
+.btn-zoom:active {
+    background: var(--primary) !important;
+    color: white !important;
+    transform: scale(0.9);
+}
+
+/* Indicador de escala (El nÃƒÂºmero 1.0x) */
+#conf-indicador-barra {
+    min-width: 80px !important;
+    /* MÃƒÂ¡s ancho para que no se mueva nada */
+    text-align: center !important;
+    font-weight: 900 !important;
+    color: var(--primary) !important;
+    background: rgba(142, 68, 173, 0.1) !important;
+    padding: 10px 5px !important;
+    border-radius: 12px !important;
+    font-size: 1.1rem !important;
+    display: inline-block !important;
+}
+
+/* Ajuste para los modales de Ayuda/Acerca de */
+#modal-ayuda .card-modal,
+#modal-acerca .card-modal {
+    text-align: left;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+/* =========================================
+   9. ESTILOS EXCLUSIVOS: EDITOR PREMIUM NÃƒâ€EMA
+   ========================================= */
+/* 1. NUEVAS FUENTES (Pon esto en la lÃƒÂ­nea 1 de tu CSS) */
+/* Import moved to top */
+
+/* ... resto de tu CSS ... */
+
+/* 2. AGREGA ESTO AL FINAL DE TU CSS PARA EL EDITOR */
+/* Estilo base (Modo DÃƒÂ­a - Blanco) */
+.editor-premium-card {
+    background: #ffffff;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    color: #333;
+    transition: background 0.3s;
+}
+
+/* Estilo Modo Noche (Negro Transparente) */
+body.dark .editor-premium-card {
+    background: rgba(20, 20, 20, 0.90) !important;
+    /* Negro transparente */
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    color: white;
+}
+
+/* Ajuste de textos en el editor para que se vean en ambos modos */
+body.dark .label-editor {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.label-editor {
+    color: #666;
+    font-size: 0.8rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    display: block;
+}
+
+/* Efecto Cristal (Glassmorphism) del Panel */
+.glass-premium {
+    background: rgba(30, 30, 30, 0.85) !important;
+    /* Oscuro elegante */
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.5);
+    color: white;
+}
+
+/* Sliders TÃƒÂ¡ctiles (Las barras de brillo/blur) */
+.slider-noma {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 5px;
+    outline: none;
+    margin: 10px 0;
+}
+
+.slider-noma::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    background: #8e44ad;
+    /* Morado NÃƒÂ´ema */
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid white;
+    box-shadow: 0 0 10px rgba(142, 68, 173, 0.6);
+}
+
+/* Iconos de Formato (Cuadrado, Historia, etc) */
+.icon-format {
+    padding: 12px;
+    border-radius: 12px;
+    cursor: pointer;
+    opacity: 0.4;
+    transition: all 0.3s ease;
+    color: white;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.icon-format.active {
+    opacity: 1;
+    background: rgba(142, 68, 173, 0.2);
+    color: #8e44ad;
+    border: 1px solid rgba(142, 68, 173, 0.5);
+    transform: scale(1.1);
+}
+
+/* Botones de Fuentes (Sana Doctrina, etc) */
+.pill-font {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: rgba(255, 255, 255, 0.8);
+    padding: 8px 18px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
+    transition: 0.3s;
+}
+
+.pill-font:hover,
+.pill-font:active {
+    background: #8e44ad;
+    color: white;
+    border-color: #8e44ad;
+    box-shadow: 0 0 15px rgba(142, 68, 173, 0.4);
+}
+
+/* Animaciones del Editor */
+.panel-smooth {
+    transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* =========================================
+   ANIMACIÓN DE INICIO (NÔEMA - MÉTODO SEGURO)
+   ========================================= */
+.splash-screen {
+    position: fixed;
+    inset: 0;
+    background: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 99999;
+}
+
+.noema-reveal-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Cinzel', serif;
+    font-size: 4rem;
+    position: relative;
+    /* Movemos el contenedor a la derecha para que la N inicie en el centro exacto */
+    transform: translateX(65px); 
+    /* A los 1.5s, deslizamos todo al centro real */
+    animation: centrarPalabra 1s cubic-bezier(0.65, 0, 0.35, 1) forwards 1.5s;
+}
+
+.letra-n, .letras-resto {
+    background: linear-gradient(120deg, #ffffff 35%, #a55eea 50%, #ffffff 65%);
+    background-size: 200% auto;
+    background-position: 200% center;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+    -webkit-background-clip: text;
+    background-clip: text;
+    display: inline-block;
+    transform: translateZ(0); /* Evita parpadeos en móviles */
+}
+
+.letra-n {
+    margin-right: -2px; /* Junta la N con la ô */
+    opacity: 0;
+    animation: 
+        fadeInN 1.2s ease-out forwards,
+        destelloVioleta 2.5s linear infinite 3.2s;
+}
+
+.letras-resto {
+    opacity: 0;
+    /* Aparece junto con el deslizamiento del contenedor */
+    animation: 
+        fadeInResto 1s cubic-bezier(0.65, 0, 0.35, 1) forwards 1.5s,
+        destelloVioleta 2.5s linear infinite 3.2s;
+}
+
+/* KEYFRAMES */
+@keyframes centrarPalabra {
+    100% { transform: translateX(0); }
+}
+
+@keyframes fadeInN {
+    0% { opacity: 0; filter: blur(10px); transform: scale(0.9); }
+    100% { opacity: 1; filter: blur(0); transform: scale(1); }
+}
+
+@keyframes fadeInResto {
+    0% { opacity: 0; filter: blur(8px); transform: translateX(-15px); }
+    100% { opacity: 1; filter: blur(0); transform: translateX(0); }
+}
+
+@keyframes destelloVioleta {
+    0% { background-position: 200% center; }
+    100% { background-position: -200% center; }
+}
+
+/* =========================================
+   ESTILOS SPLIT SCREEN, AUDIO Y BOTONES (VERSIÃƒâ€œN FINAL)
+   ========================================= */
+
+/* 1. EL CONTENEDOR MAESTRO (Sin scroll global) */
+#contenedor-split {
+    /* Altura: Pantalla completa menos la cabecera (aprox 80px) */
+    height: calc(100vh - 80px) !important;
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    /* IMPORTANTE: Corta el scroll externo */
+}
+
+/* 2. EL PANEL SUPERIOR (WRAPPER QUE HACE EL SCROLL) */
+/* Este es el que ahora maneja el deslizamiento */
+#scroll-wrapper-sup {
+    flex: 1;
+    /* Ocupa todo el espacio disponible */
+    overflow-y: auto;
+    /* AquÃƒÂ­ ocurre el scroll */
+    padding: 20px;
+    padding-bottom: 40px;
+
+    /* Suavizado para que se sienta nativo en mÃƒÂ³viles */
+    -webkit-overflow-scrolling: touch;
+}
+
+/* 3. EL Ãƒï¿½REA DE TEXTO (TEXTO PURO) */
+/* Le quitamos el scroll porque ahora estÃƒÂ¡ dentro del wrapper */
+#area-lectura {
+    overflow: visible !important;
+    height: auto !important;
+    padding-bottom: 0 !important;
+    flex: none !important;
+    /* Deja de intentar estirarse solo */
+}
+
+/* 4. LOS BOTONES INTEGRADOS (ADIÃƒâ€œS CAPA BLANCA) */
+.navegacion-caps-integrada {
+    display: flex;
+    gap: 15px;
+    margin-top: 40px;
+    /* SeparaciÃƒÂ³n elegante del texto */
+    padding: 10px 0;
+    background: transparent;
+    /* Fondo transparente = Sin corte feo */
+}
+
+.navegacion-caps-integrada button {
+    flex: 1;
+    padding: 15px;
+    border-radius: 18px;
+    border: 1px solid var(--border-ui);
+    background: var(--card-bg-ui);
+    /* Usa el color de la tarjeta segÃƒÂºn el tema */
+    color: var(--text-ui);
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: var(--shadow-ui);
+    transition: transform 0.1s;
+}
+
+.navegacion-caps-integrada button:active {
+    transform: scale(0.98);
+}
+
+/* 5. BARRA DIVISORA (PÃƒÅ¡RPURA) */
+#resizer-split {
+    height: 12px;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: row-resize;
+    flex-shrink: 0;
+    /* No se aplasta */
+    touch-action: none;
+    position: relative;
+    z-index: 50;
+}
+
+#resizer-split::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    background: var(--primary);
+    opacity: 0.5;
+}
+
+.resizer-handle {
+    width: 40px;
+    height: 6px;
+    background: var(--primary);
+    border-radius: 10px;
+    position: relative;
+    z-index: 2;
+    box-shadow: 0 0 5px rgba(142, 68, 173, 0.5);
+}
+
+#resizer-split.activo::before {
+    opacity: 1;
+    height: 3px;
+}
+
+#resizer-split.activo .resizer-handle {
+    transform: scale(1.2);
+}
+
+/* 6. PANEL INFERIOR (SECUNDARIO) */
+#area-lectura-secundaria {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* 7. RESALTADO DE AUDIO */
+.versiculo.audio-activo {
+    background: rgba(142, 68, 173, 0.1);
+    border-left: 4px solid var(--primary);
+    padding-left: 15px;
+    transition: all 0.5s ease;
+}
+
+/* EVITAR SELECCIÃƒâ€œN DE TEXTO EN BOTONES DE LA ISLA */
+.pill-white,
+.pill-glass,
+.icon-tool,
+.btn-noema-purple {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+    cursor: default;
+    /* Evita que el cursor cambie a modo texto */
+}
+
+/* IGUALAR ASPECTO DE AMBOS PANELES */
+.versiculo-sec {
+    padding: 8px 5px !important;
+    /* El mismo padding que pusimos antes */
+    margin: 0 !important;
+    line-height: 1.6;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    /* Una lÃƒÂ­nea casi invisible para separar */
+}
+
+#area-lectura-secundaria {
+    overflow-y: auto;
+    background: var(--bg);
+    /* Asegura que el fondo sea el mismo */
+    color: var(--text);
+}
+
+/* === PARCHE FINAL PARA OCULTAR VISTAS === */
+
+/* 1. Regla Maestra: Si es una vista, OCÃƒÅ¡LTALA a la fuerza */
+.vista {
+    display: none !important;
+}
+
+/* 2. ExcepciÃƒÂ³n: Solo muestra la que tenga la clase "activa" */
+.vista.activa {
+    display: block !important;
+    animation: fadeIn 0.3s ease;
+    /* Tu animaciÃƒÂ³n suave */
+}
+
+/* 3. ExcepciÃƒÂ³n especial: Setup y Kerygma usan Flexbox */
+#vista-setup.activa,
+#vista-kerygma.activa {
+    display: flex !important;
+}
+
+/* Efecto de Feedback para el Long Press */
+.pill-glass,
+.pill-white {
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), background-color 0.2s;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Clase que aplicaremos por JS mientras se mantiene presionado */
+.btn-presionado {
+    transform: scale(0.9) !important;
+    background-color: var(--primary) !important;
+    color: white !important;
+    box-shadow: 0 0 15px var(--primary) !important;
+}
+
+/* Efecto de brillo sutil */
+.btn-presionado::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.2);
+    animation: pulse-brillo 0.8s infinite;
+}
+
+@keyframes pulse-brillo {
+    0% {
+        opacity: 0.3;
+    }
+
+    50% {
+        opacity: 0.6;
+    }
+
+    100% {
+        opacity: 0.3;
+    }
+}
+
+/* Esto aplica tanto para NÃƒÂ´ema (.msg) como para Kerygma (.k-chat-msg) */
+.msg,
+.k-chat-msg {
+    /* Permite que el texto respire y ocupe el espacio necesario */
+    white-space: pre-wrap !important;
+    /* Respeta los pÃƒÂ¡rrafos y saltos de lÃƒÂ­nea */
+    word-break: break-word !important;
+    /* Si hay una palabra larguÃƒÂ­sima, la corta para que no rompa el ancho */
+    height: auto !important;
+    /* La altura se ajusta al contenido */
+    max-height: none !important;
+    /* Elimina cualquier techo o lÃƒÂ­mite de altura */
+    overflow: visible !important;
+    /* Asegura que no aparezcan barras de scroll DENTRO de la burbuja */
+}
+
+/* Asegura que el contenedor principal tenga espacio para hacer scroll infinito */
+#kerygma-chat-history,
+#chat-historial {
+    padding-bottom: 150px !important;
+    /* Espacio extra al final para leer cÃƒÂ³modo */
+}
+
+/* =========================================
+   10. SISTEMA DE VOZ PREMIUM
+   ========================================= */
+.btn-micro {
+    background: transparent !important;
+    border: none !important;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    margin-right: 5px;
+    outline: none !important;
+    box-shadow: none !important;
+    /* Asegurar que no hay sombra de caja */
+}
+
+.btn-micro:active {
+    transform: scale(0.9);
+}
+
+.icono-micro {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    pointer-events: none;
+    mix-blend-mode: multiply;
+    /* MAGIA: Elimina el fondo blanco en modo claro */
+    filter: drop-shadow(0 2px 4px rgba(142, 68, 173, 0.2));
+    transition: all 0.3s;
+}
+
+body.dark .icono-micro {
+    mix-blend-mode: screen;
+    /* MAGIA: Elimina el fondo negro/oscuro en modo noche */
+    filter: invert(1) brightness(2) drop-shadow(0 2px 4px rgba(142, 68, 173, 0.5));
+    /* Invertimos si el icono es oscuro sobre blanco, 'screen' harÃƒÂ¡ el resto */
+}
+
+.btn-micro:hover .icono-micro {
+    filter: drop-shadow(0 0 12px rgba(142, 68, 173, 0.8));
+    transform: scale(1.1);
+}
+
+/* AnimaciÃƒÂ³n de "Escuchando" */
+.btn-micro.escuchando .icono-micro {
+    animation: pulso-micro 1.5s infinite ease-in-out;
+    filter: drop-shadow(0 0 15px rgba(255, 0, 0, 0.6));
+    /* Cambia a rojo sutil al grabar */
+}
+
+@keyframes pulso-micro {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.15);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* --- ESTILOS MODO VOZ (CORREGIDO) --- */
+
+/* 1. PANTALLA DE ESCUCHA (OVERLAY) - CAPA SUPERIOR ABSOLUTA */
+#vista-voz {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(18, 18, 18, 0.95);
+    /* Fondo muy oscuro */
+    /* Z-Index extremo para tapar el chat y cualquier modal */
+    z-index: 2147483647 !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    color: white;
+    backdrop-filter: blur(15px);
+    transition: opacity 0.3s ease;
+}
+
+#vista-voz.hidden {
+    display: none !important;
+}
+
+/* Centrado perfecto */
+.voz-contenido {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    transform: translateY(-20px);
+    /* Un pequeÃƒÂ±o ajuste visual hacia arriba */
+}
+
+#estado-voz {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    font-size: 1.5rem;
+    margin-bottom: 50px;
+    opacity: 0.9;
+    letter-spacing: 1px;
+}
+
+#subtexto-voz {
+    opacity: 0.6;
+    font-size: 1.1rem;
+    margin-top: 30px;
+    max-width: 85%;
+    text-align: center;
+    min-height: 1.5em;
+    /* Evita saltos si estÃƒÂ¡ vacÃƒÂ­o */
+}
+
+.btn-cerrar-voz {
+    margin-top: 50px;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    padding: 12px 35px;
+    border-radius: 30px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.btn-cerrar-voz:active {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* 2. ORBE ANIMADO (GOOGLE COLORS) */
+.orbe-animado {
+    width: 120px;
+    /* Un poco mÃƒÂ¡s grande */
+    height: 120px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #4285f4, #ea4335, #fbbc05, #34a853);
+    background-size: 300% 300%;
+    animation: orbe-respirar 3s ease-in-out infinite, orbe-colores 8s ease infinite;
+    box-shadow: 0 0 40px rgba(66, 133, 244, 0.5);
+}
+
+.orbe-animado.hablando {
+    animation: orbe-hablar 0.4s infinite alternate, orbe-colores 2s ease infinite;
+}
+
+@keyframes orbe-respirar {
+    0% {
+        transform: scale(0.9);
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+    }
+
+    50% {
+        transform: scale(1.15);
+        box-shadow: 0 0 60px rgba(66, 133, 244, 0.7);
+    }
+
+    100% {
+        transform: scale(0.9);
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+    }
+}
+
+@keyframes orbe-hablar {
+    0% {
+        transform: scale(1);
+    }
+
+    100% {
+        transform: scale(1.25);
+    }
+}
+
+@keyframes orbe-colores {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* 3. BOTÃƒâ€œN MICRÃƒâ€œFONO (SOLO ICONO AGRANDADO) */
+#btn-mic-chat {
+    width: 55px !important;
+    /* Espacio total del botÃƒÂ³n */
+    height: 55px !important;
+    background-color: transparent !important;
+    /* Sin fondo pÃƒÂºrpura */
+    border: none !important;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0.9;
+    transition: transform 0.2s ease;
+    vertical-align: middle;
+}
+
+/* ============================================================
+   3. BOTÃƒâ€œN MICRÃƒâ€œFONO (SOLO ICONO MAXIMIZADO Y CENTRADO)
+   ============================================================ */
+#btn-mic-chat {
+    width: 55px !important;
+    /* Espacio total del botÃƒÂ³n */
+    height: 55px !important;
+    background-color: transparent !important;
+    /* Sin cÃƒÂ­rculo pÃƒÂºrpura */
+    border: none !important;
+    display: inline-flex !important;
+    /* Flexbox para centrado perfecto */
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0.9;
+    transition: transform 0.2s ease;
+    vertical-align: middle;
+    padding: 0 !important;
+    /* Eliminamos padding para que no se desplace */
+    margin-right: 5px;
+    /* Espacio respecto al botÃƒÂ³n de enviar */
+}
+
+/* AQUÃƒï¿½ FORZAMOS EL TAMAÃƒâ€˜O DEL ICONO (DIBUJO) */
+#btn-mic-chat i,
+#btn-mic-chat svg {
+    /* Si el icono es una fuente (FontAwesome, etc.) usa esto: */
+    font-size: 2.2rem !important;
+    /* AJUSTE DE ALTURA: */
+    /* Un nÃƒÂºmero negativo lo sube (ej: -3px), un nÃƒÂºmero positivo lo baja */
+    transform: translateY(-4px) !important;
+}
+
+/* CorrecciÃ³n: Se aÃ±ade el selector para el icono dentro del botÃ³n */
+#btn-mic-chat img,
+#btn-mic-chat svg {
+    /* Forzamos el tamaÃ±o del icono */
+    width: 35px !important;
+    height: 35px !important;
+
+    /* Color pÃºrpura (solo funciona si es un SVG interno) */
+    color: #9b59b6 !important;
+    fill: #9b59b6 !important;
+
+    /* Sombra para que resalte sobre fondos oscuros */
+    filter: drop-shadow(0 2px 8px rgba(155, 89, 182, 0.3));
+
+    /* Evita que el icono bloquee el clic en el botÃ³n */
+    pointer-events: none;
+}
+
+/* Feedback visual al presionar el botÃ³n */
+#btn-mic-chat:active {
+    transform: scale(1.1);
+    transition: transform 0.1s ease;
+}
+
+/* ESTILO BOTÃƒâ€œN INTELIGENTE PWA */
+.btn-install {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 18px;
+    margin-bottom: 12px;
+    background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+    /* Verde ÃƒÂ©xito */
+    border: none;
+    border-radius: 16px;
+    color: white;
+    font-size: 0.95rem;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+    transition: transform 0.2s, opacity 0.3s;
+}
+
+.btn-install::before {
+    content: "Ã°Å¸â€œÂ²";
+    /* Icono de mÃƒÂ³vil */
+    margin-right: 15px;
+    font-size: 1.3rem;
+}
+
+.btn-install:active {
+    transform: scale(0.95);
+}
+
+/* La clase hidden ya la tienes, pero aseguramos que use display none */
+.hidden {
+    display: none !important;
+}
+
+/* =========================================
+   PANEL DE SUGERENCIAS (Estilo Gemini)
+   ========================================= */
+.sugerencias-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    /* Ocupa todo el alto disponible para centrarse */
+    width: 100%;
+    position: absolute;
+    /* Flota sobre el chat */
+    top: 0;
+    left: 0;
+    z-index: 10;
+    padding: 20px;
+    gap: 15px;
+    /* Espacio entre botones */
+    pointer-events: none;
+    /* Permite tocar el fondo, pero activamos los botones abajo */
+    transition: opacity 0.3s ease;
+}
+
+.sugerencias-container.oculto {
+    opacity: 0;
+    pointer-events: none;
+    display: none;
+    /* Lo sacamos del flujo para que no estorbe */
+}
+
+/* TÃƒÂ­tulo opcional encima de las sugerencias (ej: "Ã‚Â¿QuÃƒÂ© quieres saber?") */
+.titulo-sugerencias {
+    color: var(--text);
+    opacity: 0.7;
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    font-weight: 300;
+}
+
+/* LOS BOTONES (CHIPS) */
+.chip-sugerencia {
+    pointer-events: auto;
+    /* Reactivamos el click en los botones */
+    background: rgba(40, 40, 45, 0.9);
+    /* Fondo oscuro semitransparente */
+    border: 1px solid rgba(155, 89, 182, 0.3);
+    /* Borde morado sutil */
+    color: #e0e0e0;
+    padding: 12px 25px;
+    border-radius: 25px;
+    /* Forma de pÃƒÂ­ldora */
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    max-width: 90%;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.chip-sugerencia:active {
+    transform: scale(0.95);
+    background: rgba(155, 89, 182, 0.2);
+    border-color: #9b59b6;
+}
+
+/* Icono pequeÃƒÂ±o dentro del chip (opcional) */
+.chip-icono {
+    font-size: 1.1rem;
+    color: #9b59b6;
+}
+
+/* =========================================
+   SWITCH TOGGLE (MODO OSCURO)
+   ========================================= */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 28px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+input:checked+.slider {
+    background-color: #8e44ad;
+}
+
+input:focus+.slider {
+    box-shadow: 0 0 1px #8e44ad;
+}
+
+input:checked+.slider:before {
+    -webkit-transform: translateX(22px);
+    -ms-transform: translateX(22px);
+    transform: translateX(22px);
+}
+
+/* Rounded sliders */
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+}
+
+.ios-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    height: auto;
+}
+
+.ios-heading {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 2.2rem;
+    color: white;
+    margin: 0;
+}
+
+.ios-save-btn {
+    background: #bf5af2;
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+.ios-toolbar-wrapper {
+    padding: 10px 20px;
+}
+
+.ios-toolbar {
+    background: rgba(40, 40, 40, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 15px;
+    padding: 10px 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.tool-group {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.ios-divider {
+    width: 1px;
+    height: 20px;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.ios-btn-tool {
+    background: none;
+    border: none;
+    color: #aaa;
+    font-size: 1.1rem;
+    cursor: pointer;
+    padding: 5px;
+    transition: 0.2s;
+}
+
+.ios-btn-tool:hover {
+    color: white;
+}
+
+.ios-btn-tool.bold {
+    font-weight: 900;
+    font-family: sans-serif;
+}
+
+.ios-btn-tool.italic {
+    font-style: italic;
+    font-family: serif;
+}
+
+.ios-btn-tool.underline {
+    text-decoration: underline;
+    font-family: sans-serif;
+}
+
+.tool-group.colors {
+    gap: 10px;
+}
+
+.color-dot {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.color-dot:hover {
+    transform: scale(1.1);
+}
+
+.color-dot.yellow {
+    background: #f1c40f;
+}
+
+.color-dot.red {
+    background: #e74c3c;
+}
+
+.color-dot.blue {
+    background: #3498db;
+}
+
+.ios-content-area {
+    padding: 10px 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+.ios-input-title {
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 1.8rem;
+    font-weight: 700;
+    font-family: 'Montserrat', sans-serif;
+    margin-bottom: 15px;
+    width: 100%;
+    outline: none;
+}
+
+.ios-input-title::placeholder {
+    color: #555;
+}
+
+.ios-textarea {
+    background: transparent;
+    border: none;
+    color: #ddd;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    width: 100%;
+    resize: none;
+    outline: none;
+    flex: 1;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    min-height: 300px;
+}
+
+.ios-textarea::placeholder {
+    color: #444;
+}
+
+/* Missing Canvas Styles (just in case app.js needs them or user adds it back) */
+#contenedor-canvas-nota {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    z-index: 50;
+    pointer-events: none;
+    /* Allow click through unless drawing */
+}
+
+#contenedor-canvas-nota canvas {
+    pointer-events: auto;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* =========================================
+   ESTILOS EDITOR NOTAS IOS DARK PREMIUM
+   ========================================= */
+
+/* Tema General del Modal */
+/* Tema General del Modal */
+#win-notas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2000;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+#notas-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #1C1C1E;
+    z-index: 1999;
+    /* Just below #win-notas (2000) */
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+#notas-backdrop.visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.sheet-notas.ios-notes-theme {
+    background-color: #1C1C1E !important;
+    /* Fondo oscuro iOS */
+    color: white;
+    border-top-left-radius: 0;
+    /* Remove radius for full screen feel */
+    border-top-right-radius: 0;
+}
+
+.sheet-notas.ios-notes-theme .sheet-handle {
+    background: #3a3a3c;
+    /* Manija mÃ¡s oscura */
+}
+
+/* 1. Cabecera */
+.win-header.ios-header {
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: none;
+    /* Quitamos lÃ­neas viejas */
+}
+
+.ios-heading {
+    margin: 0;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 1.8rem;
+    letter-spacing: 0.5px;
+}
+
+.btn-save.ios-save-btn {
+    background: #8e44ad !important;
+    /* PÃºrpura NÃ´ema */
+    color: white !important;
+    border-radius: 20px;
+    padding: 8px 20px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-transform: none;
+    /* No mayÃºsculas forzadas */
+    border: none;
+    box-shadow: 0 4px 12px rgba(142, 68, 173, 0.4);
+    opacity: 1;
+    /* Asegurar visibilidad */
+}
+
+/* 2. Barra de Herramientas (Toolbar) */
+.ios-toolbar-wrapper {
+    padding: 0 15px 15px 15px;
+    position: sticky;
+    top: 0;
+    z-index: 1001;
+    background: #1C1C1E;
+    /* Para tapar el texto al hacer scroll */
+}
+
+.ios-toolbar {
+    background: #2C2C2E;
+    /* Gris un poco mÃ¡s claro para destacar */
+    border-radius: 15px;
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 5px;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
+    overflow-x: auto;
+    /* Permitir scroll horizontal si se desborda */
+    white-space: nowrap;
+    /* Evitar que los items salten de lÃ­nea */
+    -webkit-overflow-scrolling: touch;
+    /* Suavidad en iOS */
+}
+
+/* Ocultar barra de scroll en toolbar para limpieza visual */
+.ios-toolbar::-webkit-scrollbar {
+    display: none;
+}
+
+.header-actions {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.icon-btn-header {
+    background: transparent !important;
+    /* Forzar transparencia */
+    border: none !important;
+    outline: none;
+    color: var(--text);
+    opacity: 0.8;
+    position: relative;
+    cursor: pointer;
+    padding: 8px;
+    /* Espacio tÃ¡ctil */
+    border-radius: 50%;
+    /* Asegurar forma circular al hacer click/focus */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: none !important;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* =========================================
+   8. NUEVO: VISTA ORACION (STORIES)
+   ========================================= */
+
+.stories-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    z-index: 30000;
+    /* Por encima de todo */
+    display: flex;
+    flex-direction: column;
+    color: white;
+}
+
+/* BARRAS DE PROGRESO */
+.stories-progress-container {
+    padding: 10px 5px;
+    display: flex;
+    gap: 4px;
+    z-index: 30002;
+}
+
+.story-progress-bg {
+    flex: 1;
+    height: 3px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.story-progress-fill {
+    height: 100%;
+    background: white;
+    width: 0%;
+}
+
+/* CABECERA */
+.stories-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+    z-index: 30002;
+}
+
+.stories-user-info {
+    display: flex;
+    align-items: center;
+}
+
+.stories-close-btn {
+    background: transparent;
+    border: none;
+    color: white;
+    cursor: pointer;
+    padding: 5px;
+}
+
+/* CONTENIDO */
+.story-content-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+    text-align: center;
+    background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.8)), url('https://images.unsplash.com/photo-1510936111840-65e151ad71bb?auto=format&fit=crop&q=80&w=1000');
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
+
+/* Capa oscura extra para legibilidad */
+.story-content-area::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: -1;
+}
+
+#story-title,
+#story-text {
+    z-index: 1;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+}
+
+/* ZONAS DE TOQUE */
+.story-touch-left,
+.story-touch-right {
+    position: absolute;
+    top: 60px;
+    /* Debajo del header */
+    bottom: 0;
+    width: 30%;
+    z-index: 30001;
+}
+
+.story-touch-left {
+    left: 0;
+}
+
+.story-touch-right {
+    right: 0;
+    width: 70%;
+    /* Lado derecho mÃ¡s grande para avanzar fÃ¡cil */
+}
+
+.ios-btn-tool {
+    background: transparent;
+    border: none;
+    color: #aaa;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: serif;
+    /* Para que B I U se vean clÃ¡sicas */
+    transition: all 0.2s;
+}
+
+.ios-btn-tool:active {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+.ios-btn-tool.bold {
+    font-weight: 900;
+}
+
+.ios-btn-tool.italic {
+    font-style: italic;
+}
+
+.ios-btn-tool.underline {
+    text-decoration: underline;
+}
+
+.ios-divider {
+    width: 1px;
+    height: 24px;
+    background: rgba(255, 255, 255, 0.15);
+    margin: 0 8px;
+}
+
+/* Puntos de Color */
+.color-dot {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 2px solid #2C2C2E;
+    /* Borde del mismo color del fondo para "recortar" */
+    cursor: pointer;
+    margin: 0 3px;
+    transition: transform 0.2s;
+}
+
+.color-dot:active {
+    transform: scale(1.2);
+}
+
+.color-dot.yellow {
+    background-color: #f1c40f;
+}
+
+.color-dot.red {
+    background-color: #e74c3c;
+}
+
+.color-dot.blue {
+    background-color: #3498db;
+}
+
+/* 3. Ãrea de Inputs */
+.ios-content-area {
+    padding: 0 20px 20px 20px;
+}
+
+.ios-input-title {
+    background: transparent !important;
+    border: none !important;
+    color: white !important;
+    font-size: 1.4rem;
+    font-weight: 600;
+    padding: 15px 0;
+    width: 100%;
+    outline: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 0 !important;
+}
+
+.ios-input-title::placeholder {
+    color: #666;
+}
+
+.ios-textarea {
+    background: transparent !important;
+    border: none !important;
+    color: #ddd !important;
+    font-size: 1rem;
+    line-height: 1.6;
+    padding: 20px 0;
+    width: 100%;
+    height: 400px;
+    outline: none;
+    resize: none;
+    font-family: 'Montserrat', sans-serif;
+    overflow-y: auto;
+    display: block;
+}
+
+.ios-textarea:empty::before {
+    content: attr(placeholder);
+    color: #555;
+    pointer-events: none;
+    display: block;
+}
+
+/* Ocultar iconos de la barra lateral (text only) */
+.sidebar button::before {
+    content: none !important;
+    display: none !important;
+}
+
+.sidebar button {
+    padding-left: 20px !important;
+    text-align: left !important;
+}
+
+/* =========================================
+   EDITOR DE FOTO - CONTROLES (BRILLO / CONTRASTE / TEXTO)
+   ========================================= */
+.editor-controles {
+    width: 280px;
+    margin: 14px auto 0;
+    padding: 12px 12px 8px;
+    border-radius: 16px;
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.editor-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 10px 0;
+}
+
+.editor-row label {
+    width: 78px;
+    color: #fff;
+    font-weight: 700;
+    font-size: .85rem;
+}
+
+.editor-row input[type="range"] {
+    flex: 1;
+}
+
+.editor-row input[type="text"],
+.editor-row select {
+    flex: 1;
+    padding: 9px 10px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    background: rgba(0, 0, 0, 0.25);
+    color: #fff;
+    outline: none;
+}
+
+.editor-row-2 {
+    align-items: flex-start;
+}
+
+.editor-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.editor-ayuda {
+    display: block;
+    margin-top: 6px;
+    color: rgba(255, 255, 255, 0.75);
+    font-size: .75rem;
+    text-align: center;
+}
+
+/* CUANDO EL MODO NOCHE ESTÃ ACTIVO (body tiene clase .dark) */
+body.dark .glass-premium {
+    background: rgba(20, 20, 20, 0.95) !important;
+    backdrop-filter: blur(25px);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+body.dark #premium-text-input {
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+body.dark .control-group label {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+/* OPCIONAL: Si quieres que los Sliders resalten mÃ¡s en la oscuridad */
+body.dark .slider-noma::-webkit-slider-thumb {
+    box-shadow: 0 0 15px rgba(142, 68, 173, 0.8);
+}
+
+/* =========================================
+   ESTILOS BOTÃ“N GALERÃA (EDITOR)
+   ========================================= */
+.btn-galeria {
+    /* Esto asegura que se vea como un botÃ³n especial */
+    background-color: rgba(255, 255, 255, 0.05) !important;
+    border: 2px dashed #8e44ad !important;
+    /* Borde punteado morado */
+    color: white;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 60px;
+    /* Mismo ancho que los otros fondos */
+    height: 60px;
+    /* Misma altura */
+    border-radius: 10px;
+    transition: transform 0.1s ease;
+}
+
+/* Efecto al presionar */
+.btn-galeria:active {
+    transform: scale(0.95);
+    background-color: rgba(142, 68, 173, 0.2) !important;
+}
+
+/* Texto pequeÃ±o "GalerÃ­a" */
+.btn-galeria small {
+    font-size: 9px;
+    margin-top: 2px;
+    opacity: 0.8;
+}
+
+/* AlineaciÃ³n perfecta Icono + Texto */
+.btn-menu-item {
+    /* <--- ANTES DECÃA .btn-con-icono */
+    display: flex !important;
+    align-items: center;
+    /* Centrado vertical */
+    justify-content: flex-start;
+    /* Texto a la izquierda */
+    gap: 15px;
+    /* <--- AumentÃ© esto para separarlos mÃ¡s */
+    text-align: left;
+    padding-left: 15px;
+}
+
+/* Color suave para los iconos */
+.btn-menu-item svg {
+    /* <--- ANTES DECÃA .btn-con-icono */
+    opacity: 0.8;
+    transition: transform 0.2s ease;
+}
+
+/* Efecto al tocar: el icono se mueve un poquito */
+.btn-menu-item:active svg {
+    /* <--- ANTES DECÃA .btn-con-icono */
+    transform: scale(0.9);
+    stroke: #8e44ad;
+    /* Color morado al tocar */
+}
+
+/* =========================================
+   PANTALLA DE ACTUALIZACIÃ“N (MODO PREMIUM)
+   ========================================= */
+#modal-update {
+    position: fixed;
+    inset: 0;
+    background: #000000;
+    z-index: 99999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+#modal-update.activo {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.update-content {
+    width: 80%;
+    max-width: 300px;
+    text-align: center;
+}
+
+.update-title {
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 1.2rem;
+    letter-spacing: 2px;
+    margin-bottom: 30px;
+    text-transform: uppercase;
+}
+
+.progress-track {
+    width: 100%;
+    height: 6px;
+    background: #333;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 15px;
+    position: relative;
+}
+
+.progress-fill {
+    width: 0%;
+    height: 100%;
+    background: #8e44ad;
+    /* Color NÃ´ema */
+    border-radius: 10px;
+    transition: width 0.1s linear;
+    box-shadow: 0 0 15px #8e44ad;
+}
+
+.progress-text {
+    color: #888;
+    font-family: monospace;
+    font-size: 0.9rem;
+}
+
+/* =========================================
+   SECCIÃ“N: ALERTA DE ACTUALIZACIÃ“N (BEACON PREMIUM)
+   ========================================= */
+#update-beacon {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translate(-50%, 150%);
+    /* Oculto abajo */
+    width: 90%;
+    max-width: 360px;
+
+    /* Efecto Cristal Oscuro */
+    background: rgba(20, 20, 20, 0.9);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+
+    border: 1px solid rgba(142, 68, 173, 0.3);
+    /* Borde violeta sutil */
+    border-radius: 20px;
+    padding: 15px 20px;
+
+    display: flex;
+    align-items: center;
+    gap: 15px;
+
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.8),
+        0 0 20px rgba(142, 68, 173, 0.1);
+    /* Resplandor */
+    z-index: 12000;
+    /* Por encima de todo */
+
+    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+#update-beacon.visible {
+    transform: translate(-50%, 0);
+    /* Sube a la vista */
+}
+
+.beacon-icon {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, #8e44ad, #3498db);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(142, 68, 173, 0.3);
+    flex-shrink: 0;
+}
+
+.beacon-info {
+    flex-grow: 1;
+}
+
+.beacon-title {
+    color: white;
+    font-size: 14px;
+    font-weight: 700;
+    margin: 0 0 2px 0;
+}
+
+.beacon-desc {
+    color: #aaa;
+    font-size: 11px;
+    margin: 0;
+}
+
+.btn-beacon {
+    background: white;
+    color: black;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 12px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.btn-beacon:active {
+    transform: scale(0.95);
+}
+
+/* =========================================
+   CORRECCIONES Z-INDEX (MI ESPACIO vs DEMÁS)
+   ========================================= */
+#modal-mi-espacio {
+    z-index: 25000 !important;
+}
+
+/* Sub-modales deben estar encima de Mi Espacio */
+#modal-resaltados,
+#modal-historial,
+#modal-mis-notas,
+#modal-config,
+#modal-perfil,
+#modal-creador-premium,
+#win-notas {
+    z-index: 26000 !important;
+}
+
+/* Backdrop de notas también alto */
+#notas-backdrop {
+    z-index: 25950 !important;
+}
+
+/* Capa Suprema: Recortador de Fotos (Por encima de Editar Perfil) */
+#modal-recorte {
+    z-index: 27000 !important;
+}
+/* =========================================
+   CENTRO DE NOTIFICACIONES (PANEL LATERAL)
+   ========================================= */
+.panel-lateral-derecho {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 85%;
+    max-width: 320px;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.65);
+    /* Transparencia Light */
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    z-index: 30000;
+
+    transform: translateX(100%);
+    /* Oculto a la derecha */
+    transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+
+    border-left: 1px solid var(--border-ui);
+    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1);
+
+    display: flex;
+    flex-direction: column;
+}
+
+body.dark .panel-lateral-derecho {
+    background: rgba(18, 18, 18, 0.75);
+    /* Transparencia Dark */
+    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
+}
+
+.panel-lateral-derecho.abierto {
+    transform: translateX(0);
+}
+
+.panel-header-notif {
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-ui);
+}
+
+.panel-header-notif h3 {
+    margin: 0;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    letter-spacing: -0.5px;
+    color: var(--text-ui);
+}
+
+.panel-header-notif button {
+    background: var(--border-ui);
+    border: none;
+    color: var(--text-ui);
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+
+.panel-header-notif button:active {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.panel-content-notif {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+}
+
+/* OVERLAY TRANSPARENTE-OSCURO */
+.overlay-full {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3);
+    /* Overlay mÃ¡s sutil */
+    backdrop-filter: blur(3px);
+    z-index: 29000;
+    /* Debajo del panel */
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.overlay-full.visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* ITEMS DE NOTIFICACIÃ“N */
+.notif-section-title {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: #8e44ad;
+    font-weight: 800;
+    margin-bottom: 15px;
+    letter-spacing: 1px;
+    opacity: 0.8;
+}
+
+.notif-card {
+    background: rgba(255, 255, 255, 0.5);
+    /* Tarjeta Light */
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border-ui);
+    border-radius: 15px;
+    padding: 15px;
+    margin-bottom: 15px;
+    display: flex;
+    gap: 15px;
+    align-items: flex-start;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+}
+
+body.dark .notif-card {
+    background: rgba(255, 255, 255, 0.05);
+    /* Tarjeta Dark */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.notif-icon-box {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+}
+
+.bg-purple {
+    background: rgba(142, 68, 173, 0.15);
+    color: #9b59b6;
+}
+
+.bg-yellow {
+    background: rgba(241, 196, 15, 0.15);
+    color: #f1c40f;
+}
+
+.bg-blue {
+    background: rgba(52, 152, 219, 0.15);
+    color: #3498db;
+}
+
+.notif-info h4 {
+    margin: 0 0 5px 0;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text-ui);
+}
+
+.notif-info p {
+    margin: 0;
+    font-size: 0.8rem;
+    color: var(--text-sec-ui);
+    opacity: 0.7;
+    line-height: 1.4;
+}
+
+.notif-btn-action {
+    display: inline-block;
+    margin-top: 10px;
+    font-size: 0.75rem;
+} /* <-- ¡AQUÍ CERRAMOS LA LLAVE! */
+
+/* AJUSTE DE NAVEGACIÓN INFERIOR */
+.bottom-nav {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    /* Centrado vertical */
+    padding-bottom: 15px;
+    /* Ajuste para que no estén muy arriba ni muy abajo */
+    padding-top: 10px;
+}
+
+/* =========================================
+   NUEVA SECCIÓN: CREADOR PREMIUM & CARRUSEL (ADAPTABLES)
+   ========================================= */
+
+/* -----------------------------------------
+   1. TARJETA CREADOR (Modo Día por defecto)
+   ----------------------------------------- */
+.card-creator {
+    background: linear-gradient(135deg, #ffffff, #f0f2f5);
+    border-radius: 20px;
+    padding: 15px 20px !important;
+    margin-bottom: 30px;
+    margin-top: 0;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+    
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: auto !important;
+    min-height: auto !important;
+}
+
+.card-creator:before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url('https://images.unsplash.com/photo-1513542789411-b6a5d4f31634?auto=format&fit=crop&q=80&w=300');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.08;
+    z-index: 0;
+    mix-blend-mode: multiply;
+}
+
+.card-creator:active {
+    transform: scale(0.98);
+}
+
+.creator-content {
+    position: relative;
+    z-index: 1;
+}
+
+.creator-badge {
+    background: linear-gradient(90deg, #f1c40f, #f39c12);
+    color: black;
+    font-size: 0.65rem;
+    font-weight: 800;
+    padding: 4px 8px;
+    border-radius: 6px;
+    text-transform: uppercase;
+    display: inline-block;
+    margin-bottom: 8px;
+    letter-spacing: 1px;
+}
+
+.creator-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: #1a1a1a;
+    margin: 0;
+    letter-spacing: -0.5px;
+}
+
+.creator-desc {
+    font-size: 0.85rem;
+    color: #666666;
+    margin: 5px 0 0 0;
+}
+
+.creator-icon {
+    position: relative;
+    z-index: 1;
+    width: 60px;
+    height: 60px;
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 15px rgba(241, 196, 15, 0.2);
+}
+
+/* -----------------------------------------
+   2. TARJETA DEL CARRUSEL (Modo Día por defecto)
+   ----------------------------------------- */
+.carousel-verses-container {
+    background: #ffffff;
+    border-radius: 24px;
+    padding: 20px 15px 15px 15px;
+    margin-bottom: 40px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+    border: 1px solid rgba(0, 0, 0, 0.03);
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.carousel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding: 0 5px;
+    width: 100%;
+}
+
+.carousel-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 0;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.carousel-verses {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    padding-bottom: 10px;
+    -webkit-overflow-scrolling: touch;
+    scroll-padding-left: 0;
+    padding: 0 5px 10px 5px;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.carousel-verses::-webkit-scrollbar {
+    display: none;
+}
+
+/* -----------------------------------------
+   CARRUSEL: ESTILO MINIATURA DE IMAGEN GENERADA
+   ----------------------------------------- */
+.verse-card-item {
+    flex: 0 0 95px; /* Ajuste a 95px, un tamaño ideal para formato póster cuadrado */
+    width: 95px;
+    height: 95px;
+    aspect-ratio: 1/1;
+    background-color: #222;
+    border-radius: 12px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(0,0,0,0.1);
+    
+    /* CAMBIO CLAVE: Centramos todo para simular la imagen generada */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; 
+    align-items: center;
+    padding: 8px;
+    transition: transform 0.2s ease;
+}
+
+.verse-card-item:active {
+    transform: scale(0.95);
+}
+
+.verse-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+}
+
+/* CAMBIO CLAVE: Sombra tipo viñeta (radial) como en el creador premium */
+.verse-overlay {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at center, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.75) 100%);
+    z-index: 1;
+}
+
+.verse-content-mini {
+    position: relative;
+    z-index: 2;
+    color: white;
+    text-align: center;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Texto del versículo (Estilo centrado y negrita como el Canvas) */
+.verse-text-mini {
+    display: block;
+    font-size: 0.55rem;
+    line-height: 1.25;
+    margin: 0 0 4px 0; /* Margen abajo para separar de la referencia */
+    font-family: 'Cinzel', serif; /* Misma fuente elegante del creador */
+    font-weight: 800;
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.9);
+    
+    /* Truncar texto */
+    display: -webkit-box;
+    -webkit-line-clamp: 3; 
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Referencia del versículo (Más pequeña y en cursiva, estilo Canvas) */
+.verse-ref-mini {
+    font-size: 0.45rem;
+    font-style: italic;
+    letter-spacing: 0.5px;
+    color: rgba(255, 255, 255, 0.85); /* Blanco translúcido en vez de amarillo */
+    margin: 0;
+    display: block;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+}
+
+/* -----------------------------------------
+   3. MODO NOCHE (Adaptación Automática)
+   ----------------------------------------- */
+body.dark .card-creator {
+    background: linear-gradient(135deg, #2c3e50, #000000);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+body.dark .card-creator:before {
+    opacity: 0.2;
+    mix-blend-mode: overlay;
+}
+
+body.dark .creator-title {
+    color: white;
+}
+
+body.dark .creator-desc {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+body.dark .creator-icon {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Tarjeta Carrusel Modo Noche */
+body.dark .carousel-verses-container {
+    background: #1f1f1f;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+body.dark .carousel-title {
+    color: white;
+}
+
+body.dark .verse-card-item {
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+/* -----------------------------------------
+   4. LIGHTBOX PREMIUM (Se mantiene igual)
+   ----------------------------------------- */
+#lightbox-premium {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 40000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+#lightbox-premium.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.lightbox-img-container {
+    width: 100%;
+    max-width: 500px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.lightbox-image-wrapper {
+    position: relative;
+    width: 100%;
+    margin-bottom: 25px;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+.lightbox-img {
+    width: 100%;
+    display: block;
+    max-height: 60vh;
+    object-fit: cover;
+}
+
+.lightbox-text-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 30px 20px;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.4) 70%, transparent);
+    color: white;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    min-height: 40%;
+}
+
+.lightbox-verse-text {
+    font-size: 1.1rem;
+    line-height: 1.5;
+    font-weight: 500;
+    margin-bottom: 10px;
+    font-family: 'Merriweather', serif;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.lightbox-verse-ref {
+    font-size: 0.85rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: #f1c40f;
+    letter-spacing: 1px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.lightbox-actions {
+    display: flex;
+    gap: 20px;
+    width: 100%;
+    justify-content: center;
+}
+
+.btn-lightbox {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 15px 30px;
+    border-radius: 30px;
+    font-weight: 600;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: background 0.2s;
+    flex: 1;
+    justify-content: center;
+    max-width: 180px;
+}
+
+.btn-lightbox:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.btn-lightbox.primary {
+    background: #f1c40f;
+    color: black;
+    border: none;
+    box-shadow: 0 5px 15px rgba(241, 196, 15, 0.3);
+}
+
+.btn-close-lightbox {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    cursor: pointer;
+    z-index: 40001;
+}
+
+/* =========================================
+   ESTILOS PROYECTO KERYGMA (DESBORDAMIENTO IZQUIERDO)
+   ========================================= */
+.banner-kerygma {
+    position: relative;
+    
+    /* 1. ANCHO EXTENDIDO: Compensa lo que sacamos a la izquierda */
+    width: calc(100% + 25px) !important;
+    
+    /* 2. DESPLAZAMIENTO: Lo sacamos del borde izquierdo */
+    margin-left: -25px !important;
+    margin-right: 0 !important;
+    margin-top: 20px;
+    margin-bottom: 30px;
+    
+    /* 3. BORDES: Rectos a la izquierda (0), Redondos a la derecha (25px) */
+    border-radius: 0 25px 25px 0 !important;
+    
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    
+    /* Fondo e Imagen */
+    background-image: url('https://images.unsplash.com/photo-1438232992991-995b7058bbb3?auto=format&fit=crop&q=80&w=800');
+    background-size: cover;
+    background-position: center;
+    min-height: 160px;
+    display: flex;
+    align-items: center;
+    
+    /* 4. PROTECCIÓN: Padding extra a la izquierda para que el texto no se pegue al borde de la pantalla */
+    padding-left: 25px !important;
+    
+    /* Animación de brillo */
+    animation: kerygma-glow 8s infinite ease-in-out;
+}
+
+/* =========================================
+   ESTILOS LIBROS BIBLIA (DESTELLO)
+   ========================================= */
+.btn-item-selector {
+    padding: 15px 5px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    color: var(--text);
+    cursor: pointer;
+    text-align: center;
+    font-size: 0.9rem;
+
+    /* Asegurar centrado perfecto */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-item-selector:active {
+    background-color: rgba(142, 68, 173, 0.6) !important;
+    box-shadow: 0 0 20px rgba(142, 68, 173, 0.8) !important;
+    transform: scale(0.95);
+    border-color: #9b59b6 !important;
+}
+
+.banner-kerygma::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.4) 100%);
+    z-index: 1;
+}
+
+.banner-kerygma:active {
+    transform: scale(0.98);
+}
+
+.kerygma-content {
+    position: relative;
+    z-index: 2;
+    padding: 30px;
+    color: white;
+    width: 100%;
+}
+
+.kerygma-badge {
+    display: inline-block;
+    background: rgba(142, 68, 173, 0.3);
+    border: 1px solid rgba(142, 68, 173, 0.5);
+    color: #d2b4de;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 12px;
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+    backdrop-filter: blur(5px);
+}
+
+.kerygma-title {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 1.6rem;
+    margin: 0 0 5px 0;
+    background: linear-gradient(to right, #fff, #e0e0e0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -0.5px;
+}
+
+.kerygma-slogan {
+    font-family: 'Merriweather', serif;
+    font-size: 0.95rem;
+    opacity: 0.9;
+    margin: 0;
+    font-style: italic;
+    color: #ecf0f1;
+}
+
+/* =========================================
+   ESTILOS TIMELINE & DASHBOARD (CORREGIDO)
+   ========================================= */
+
+.timeline-grid {
+    display: grid;
+    grid-template-columns: 40px 1fr;
+    /* Columna linea + Contenido */
+    gap: 0;
+    position: relative;
+    padding-bottom: 0px;
+}
+
+/* Columna Izquierda (Linea y Puntos) */
+.timeline-col {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 20px;
+    /* Ajuste inicial */
+}
+
+.timeline-line {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: repeating-linear-gradient(to bottom,
+            rgba(142, 68, 173, 0.3),
+            rgba(142, 68, 173, 0.3) 4px,
+            transparent 4px,
+            transparent 8px);
+    z-index: 0;
+}
+
+.timeline-node {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--card-bg-ui);
+    border: 2px solid #8e44ad;
+    z-index: 1;
+    box-shadow: 0 0 10px rgba(142, 68, 173, 0.4);
+    position: relative;
+    flex-shrink: 0;
+}
+
+/* 
+   AJUSTE FINO DE ALINEACIÃ“N (Puntos vs Tarjetas)
+   Se usa margin-bottom en cada nodo para empujar al siguiente hacia abajo
+   hasta que coincida con la siguiente tarjeta.
+*/
+
+/* Alineación de Nodos (Ajustada a espacios reducidos) */
+
+/* Punto 1: Pan Diario */
+.node-1 {
+    margin-top: 55px !important; /* Alinea con el título Oseas */
+    margin-bottom: 140px !important; /* Distancia al siguiente punto */
+    
+    border-color: var(--timeline-node-border);
+    box-shadow: 0 0 0 3px rgba(142, 68, 173, 0.2);
+}
+
+/* Punto 2: Reflexión */
+.node-2 {
+    margin-bottom: 115px !important; /* Distancia al punto de Oración */
+}
+
+/* Punto 3: Oración */
+.node-3 {
+    margin-bottom: 0;
+}
+
+
+/* Columna Derecha */
+.content-col {
+    padding-left: 10px;
+    overflow: visible;
+}
+
+/* =======================================================
+   REDISEÑO TARJETA PAN DIARIO (ADAPTABLE DÍA Y NOCHE)
+   ======================================================= */
+
+/* 1. MODO DÍA (Predeterminado) */
+.card-verse-day {
+    position: relative;
+    padding: 25px;
+    color: #333333; /* Texto oscuro para el día */
+
+    /* FONDO SÓLIDO CLARO */
+    background-color: #ffffff !important;
+    background-image: none !important;
+
+    /* BORDES: Solo redondeados a izquierda */
+    border-radius: 25px 0 0 25px;
+
+    /* EXTENSIÓN A DERECHA */
+    margin-right: -25px;
+    padding-right: 40px; /* Protege el botón */
+
+    margin-bottom: 10px;
+    cursor: pointer;
+    overflow: hidden;
+
+    /* Sombra suave y borde fino para fondo blanco */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    border-right: none;
+
+    /* Transición suave al cambiar de tema o al presionar */
+    transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-verse-day:active {
+    transform: scale(0.98);
+}
+
+.card-verse-day h3 {
+    font-family: 'Cinzel', serif;
+    color: #8e44ad; /* Título en violeta para buen contraste de día */
+    margin: 0 0 10px 0;
+    font-size: 1.1rem;
+    position: relative;
+    z-index: 2;
+}
+
+.verse-text-anim {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    font-style: italic;
+    opacity: 0.95;
+    font-family: 'Lora', serif;
+    position: relative;
+    z-index: 2;
+    color: #555555; /* Texto gris oscuro para lectura cómoda */
+    margin-bottom: 15px; 
+}
+
+.btn-share-verse {
+    position: absolute;
+    bottom: 10px; 
+    right: 30px;
+    background: rgba(0, 0, 0, 0.05); /* Botón gris claro de día */
+    color: #333333; /* Icono oscuro */
+    border: none;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    backdrop-filter: blur(5px);
+    z-index: 3;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* ELIMINAR EL GRADIENTE OSCURO (OVERLAY) */
+#card-versiculo-dia::before {
+    display: none !important;
+}
+
+/* =======================================================
+   2. MODO NOCHE (Cuando se activa el Dark Mode)
+   ======================================================= */
+body.dark .card-verse-day {
+    color: white;
+    background-color: #1f1f1f !important; /* Vuelve a tu gris oscuro */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-right: none;
+}
+
+body.dark .card-verse-day h3 {
+    color: #f1c40f; /* Vuelve a tu color dorado original */
+}
+
+body.dark .verse-text-anim {
+    color: #e0e0e0; /* Texto claro */
+}
+
+body.dark .btn-share-verse {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+/* =========================================
+   NUEVA ANIMACIÓN: DESTELLO DE BORDES (PULSO)
+   ========================================= */
+
+/* 1. Definimos el "latido" de luz en los bordes */
+@keyframes borde-neon-violeta {
+    0% {
+        border-color: rgba(255, 255, 255, 0.1);
+        box-shadow: 0 0 0 rgba(142, 68, 173, 0);
+    }
+    2% {
+        /* PICO DE LUZ: Borde brillante y resplandor externo/interno */
+        border-color: #d8b4fe; /* Violeta casi blanco */
+        box-shadow: 0 0 25px rgba(168, 85, 247, 0.9), 
+                    inset 0 0 15px rgba(168, 85, 247, 0.4);
+    }
+    5% {
+        /* Se apaga suavemente */
+        border-color: rgba(255, 255, 255, 0.1);
+        box-shadow: 0 0 0 rgba(142, 68, 173, 0);
+    }
+    100% {
+        /* Espera en silencio hasta los 8 segundos */
+        border-color: rgba(255, 255, 255, 0.1);
+        box-shadow: 0 0 0 rgba(142, 68, 173, 0);
+    }
+}
+
+/* 2. Aplicamos la animación a la tarjeta */
+#card-kerygma-hoy {
+    position: relative;
+    /* Aseguramos un borde base sutil */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    
+    /* ANIMACIÓN: Nombre | Duración | Tipo | Repetición */
+    animation: borde-neon-violeta 8s infinite ease-in-out;
+}
+
+/* 3. ¡IMPORTANTE! Eliminamos el destello viejo (barrido interno) */
+#card-kerygma-hoy::before {
+    content: none !important;
+    display: none !important;
+    animation: none !important;
+}
+/* =======================================================
+   FONDO TEXTURIZADO BÍBLICO (ESTILO WHATSAPP REAL)
+   ======================================================= */
+
+body.dark {
+    background-color: #000000 !important;
+    position: relative;
+    min-height: 100vh;
+    /* Evitamos que el patrón cree scroll lateral */
+    overflow-x: hidden; 
+}
+
+/* LA TEXTURA: Usamos un patrón SVG inyectado directamente en el CSS */
+body.dark::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    opacity: 0.04; /* Ajusta este valor para ver más o menos los iconos */
+    pointer-events: none;
+    
+    /* Patrón de iconos bíblicos sutiles (SVG repetido) */
+    background-image: url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='1' fill-rule='evenodd'%3E%3Cpath d='M10 10h5v5h-5zM30 40h5v5h-5zM60 20h5v5h-5zM40 70h5v5h-5zM70 50h5v5h-5z'/%3E%3Cpath d='M15 45l2-2 2 2-2 2-2-2zM55 15l2-2 2 2-2 2-2-2zM35 65l2-2 2 2-2 2-2-2zM75 25l2-2 2 2-2 2-2-2z'/%3E%3Ccircle cx='20' cy='60' r='2'/%3E%3Ccircle cx='50' cy='35' r='2'/%3E%3Ccircle cx='10' cy='25' r='1'/%3E%3Ccircle cx='65' cy='70' r='1'/%3E%3C/g%3E%3C/svg%3E");
+    background-size: 120px 120px; /* Tamaño del patrón */
+}
+
+/* EL DEGRADADO: Luz superior para dar profundidad */
+body.dark::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(circle at 50% 0%, rgba(50, 50, 50, 0.4) 0%, rgba(0, 0, 0, 0.9) 100%);
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* 2. TARJETAS CRISTALINAS (Transparencia perfecta) */
+body.dark .card-dashboard-main,
+body.dark .card-verse-day,
+body.dark .card-reflection,
+body.dark .banner-kerygma,
+body.dark .card-creator,
+body.dark .verse-card-item {
+    background-color: rgba(30, 30, 30, 0.5) !important;
+    backdrop-filter: blur(20px) saturate(150%);
+    -webkit-backdrop-filter: blur(20px) saturate(150%);
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7) !important;
+    position: relative;
+    z-index: 10;
+}
+
+/* Asegurar que el contenido sea visible sobre el fondo */
+body.dark #pantalla-inicio, 
+body.dark .vista, 
+body.dark .dashboard-container {
+    background: transparent !important;
+    position: relative;
+    z-index: 5;
+}
+/* Configuración de la Fecha en el Header */
+.fecha-header {
+    font-size: 0.85rem;
+    font-weight: 600;
+    opacity: 0.8;
+    /* Por defecto (Día) es oscuro */
+    color: #333333; 
+    transition: color 0.3s ease;
+    margin-left: 5px; /* Un pequeño margen para que no se pegue al borde */
+}
+
+/* Cuando se activa el Modo Oscuro, se vuelve blanca */
+body.dark .fecha-header {
+    color: #ffffff !important;
+}
+/* =======================================================
+   CORRECCIÓN FINAL: UNIFICACIÓN DE COLOR DE ICONOS
+   ======================================================= */
+
+/* 1. FORZAMOS A TODOS LOS ICONOS (INCLUIDO EL ACTIVO) A SER IGUALES */
+/* Esto elimina el "blanco fijo" del botón activo en modo día */
+.nav-item {
+    color: #555555 !important; /* El Gris Oscuro exacto de los iconos inactivos */
+    transition: color 0.2s ease;
+}
+
+/* 2. REGLA PARA EL ICONO SVG */
+/* Obligamos al dibujo a tomar el color del texto (sea cual sea) */
+.nav-item svg, 
+.nav-item path, 
+.nav-item polyline {
+    stroke: currentColor !important;
+    stroke-width: 2px !important;
+    fill: none !important;
+}
+
+/* 3. SOLO SI QUIERES QUE EL ACTIVO RESALTE UN POQUITO (Opcional) */
+/* Si prefieres que sea IDÉNTICO, borra este bloque .active */
+.nav-item.active {
+    color: #000000 !important; /* Negro puro para diferenciarlo un poco */
+    font-weight: 600;
+}
+
+/* =======================================================
+   MODO NOCHE (DARK MODE)
+   ======================================================= */
+   
+/* Cuando activas el modo oscuro, TODOS pasan a blanco/gris claro */
+body.dark .nav-item {
+    color: #999999 !important;
+}
+
+body.dark .nav-item.active {
+    color: #ffffff !important;
+}

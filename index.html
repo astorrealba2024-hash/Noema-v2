@@ -1,0 +1,1541 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>NÔEMA</title>
+
+    <link rel="icon" type="image/png" href="icon-512.png?v=5">
+    <link rel="apple-touch-icon" href="icon-512.png?v=5">
+    <script>
+        var version = "27"; // Incrementado para asegurar que cargue los cambios
+        document.write('<link rel="stylesheet" href="estilos.css?v=' + version + '">');
+    </script>
+    <link rel="manifest" href="manifest.json?v=5">
+
+    <meta name="theme-color" content="#1a1a1a">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lora:ital@0;1&family=Montserrat:wght@400;500;600;700;800&family=Oswald:wght@500&display=swap"
+        rel="stylesheet">
+
+    <script src="doctrinas.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <style>
+        /* Estilos de la Pantalla de Carga */
+        .splash-screen {
+            background: #1a1a1a;
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .noema-reveal-container {
+            font-family: 'Cinzel', serif;
+            color: white;
+            font-size: 4rem;
+            display: flex;
+            align-items: center;
+        }
+
+        /* Estilos Generales */
+        .sheet-handle {
+            width: 60px;
+            height: 6px;
+            background: #ccc;
+            border-radius: 10px;
+            margin: 15px auto;
+            cursor: grab;
+            position: relative;
+            z-index: 1000;
+            touch-action: none;
+        }
+
+        .sheet-handle::after {
+            content: '';
+            position: absolute;
+            top: -15px;
+            bottom: -15px;
+            left: -20px;
+            right: -20px;
+        }
+
+        #ajustes-texto {
+            top: 70px !important;
+            right: 10px !important;
+            z-index: 12000 !important;
+        }
+
+        .k-chat-msg {
+            margin-bottom: 15px;
+            padding: 12px;
+            border-radius: 15px;
+            max-width: 85%;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .k-msg-pastor {
+            align-self: flex-end;
+            background: #333;
+            color: white;
+            border-bottom-right-radius: 2px;
+        }
+
+        .k-msg-noema {
+            align-self: flex-start;
+            background: rgba(142, 68, 173, 0.1);
+            border-left: 3px solid #8e44ad;
+            color: var(--text);
+            border-bottom-left-radius: 2px;
+        }
+
+        .glass-premium {
+            background: rgba(255, 255, 255, 0.72) !important;
+            backdrop-filter: blur(20px) saturate(160%);
+            -webkit-backdrop-filter: blur(20px) saturate(160%);
+            border-top: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        body.dark-mode .glass-premium {
+            background: rgba(28, 28, 30, 0.8) !important;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .panel-smooth {
+            transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .slider-noma {
+            -webkit-appearance: none;
+            height: 4px;
+            background: var(--border);
+            border-radius: 5px;
+            outline: none;
+        }
+
+        .slider-noma::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            background: #8e44ad;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 3px solid white;
+            box-shadow: 0 0 10px rgba(142, 68, 173, 0.4);
+        }
+
+        .icon-format {
+            padding: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            opacity: 0.5;
+            transition: all 0.3s ease;
+            color: var(--text);
+        }
+
+        .icon-format.active {
+            opacity: 1;
+            background: rgba(142, 68, 173, 0.1);
+            color: #8e44ad;
+            box-shadow: 0 0 10px rgba(142, 68, 173, 0.2);
+        }
+
+        .control-group {
+            margin-bottom: 15px;
+        }
+
+        .control-group label {
+            display: block;
+            font-size: 0.7rem;
+            font-weight: bold;
+            margin-bottom: 8px;
+            opacity: 0.7;
+            letter-spacing: 0.5px;
+        }
+
+        .pill-font {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .pill-font:hover,
+        .pill-font:active {
+            background: #8e44ad;
+            color: white;
+            border-color: #8e44ad;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .fade-up {
+            animation: fadeInUp 0.4s ease forwards;
+        }
+
+        /* ESTILOS TARJETA DEL DÍA */
+        #card-versiculo-dia {
+            background-color: #333;
+            background-size: cover !important;
+            background-position: center !important;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.2s ease;
+        }
+
+        #card-versiculo-dia::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.7));
+            z-index: 0;
+        }
+
+        #card-versiculo-dia .card-content {
+            position: relative;
+            z-index: 1;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.8);
+        }
+    </style>
+</head>
+
+<body>
+
+    <section id="vista-setup" class="vista activa">
+        <div class="centro-vertical">
+            <h1 class="marca-noema">NÔEMA</h1>
+            <p class="slogan-noema">Hoy aprenderemos la palabra.</p>
+
+            <div id="form-setup" class="modal-full hidden"
+                style="background: black; z-index: 2000; position: fixed; inset: 0; flex-direction: column; justify-content: center; align-items: center; display: flex;">
+                <h1
+                    style="font-family: 'Cinzel', serif; font-size: 3rem; color: white; margin-bottom: 5px; letter-spacing: 2px;">
+                    NÔEMA</h1>
+                <p
+                    style="color: #888; letter-spacing: 3px; font-size: 0.7rem; margin-bottom: 40px; text-transform: uppercase;">
+                    Hoy aprenderemos la palabra.</p>
+                <div style="width: 85%; max-width: 350px; display: flex; flex-direction: column; gap: 15px;">
+                    <div class="avatar-wrapper" onclick="document.getElementById('setup-input-foto').click()"
+                        style="margin: 0 auto 10px; display:block; width:100px; height:100px; position:relative; cursor: pointer;">
+                        <img id="setup-avatar"
+                            src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23cccccc'%3E%3Cpath d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/%3E%3C/svg%3E"
+                            style="width:100px; height:100px; border-radius:50%; object-fit:cover; border: 2px solid #8e44ad; background:#222;">
+                        <div
+                            style="position:absolute; bottom:0; right:0; background:#8e44ad; color:white; border-radius:50%; width:30px; height:30px; display:flex; align-items:center; justify-content:center; font-size:14px; border:2px solid black;">
+                            📷</div>
+                    </div>
+                    <input type="file" id="setup-input-foto" hidden accept="image/*"
+                        onchange="App.procesarFoto(this, 'setup-avatar')">
+                    <input type="text" id="input-nombre" placeholder="¿Cómo te llamas?"
+                        style="padding: 15px; border-radius: 12px; border: 1px solid #333; background: #111; color: white; text-align: center; font-size: 1rem;">
+                    <select id="setup-genero"
+                        style="padding: 15px; border-radius: 12px; border: 1px solid #333; background: #111; color: white; text-align: center; font-size: 1rem;">
+                        <option value="" disabled selected hidden>Selecciona tu género</option>
+                        <option value="nodecirlo">Prefiero no decirlo</option>
+                        <option value="hombre">Soy Hombre</option>
+                        <option value="mujer">Soy Mujer</option>
+                    </select>
+                    <div style="position: relative;">
+                        <label
+                            style="display: block; color: #666; font-size: 0.7rem; text-align: center; margin-bottom: 5px;">FECHA
+                            DE NACIMIENTO</label>
+                        <input type="date" id="setup-cumple"
+                            style="width: 100%; padding: 15px; border-radius: 12px; border: 1px solid #333; background: #111; color: white; text-align: center; font-size: 1rem; box-sizing: border-box;">
+                    </div>
+                    <button onclick="App.guardarPerfil()" class="btn-primary"
+                        style="margin-top: 10px; background: #8e44ad; font-weight: bold; font-size: 1.1rem; padding: 15px;">Comenzar</button>
+                </div>
+            </div>
+            <div id="loading-indicator" class="splash-screen">
+                <div class="noema-reveal-container">
+                    <span class="letra-n">N</span>
+                    <span class="letras-resto">ôema</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div id="pantalla-inicio">
+        <div id="notas-backdrop" class="hidden"></div>
+        <section id="vista-inicio" class="vista" style="padding-bottom: 0;">
+
+            <div class="dashboard-container">
+
+                <!-- 1. HEADER SUPERIOR (Solo Iconos) -->
+                <header class="dashboard-top-bar">
+                    <button class="icon-btn-header" onclick="Notificaciones.abrir()">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                        </svg>
+                        <span id="notif-dot" class="notification-dot" style="display:none;"></span>
+</button>
+
+<div id="fecha-actual-header" class="fecha-header" style="order: -1; flex-grow: 1;"></div>
+
+<img id="avatar-dashboard" class="avatar-header" src="" onclick="App.abrirMiEspacio()">
+</header>
+
+                <!-- 2. TARJETA PRINCIPAL (Saludo) -->
+                <div class="card-dashboard-main" onclick="App.abrirPerfil()">
+                    <h1>Hola, <span id="saludo-usuario-dashboard">Usuario</span></h1>
+                    <p id="fecha-dashboard">Exploremos las escrituras hoy</p>
+                </div>
+
+                <!-- 3. GRID TIMELINE (Solo conecta Pan Diario, Reflexión, Oración) -->
+                <div class="timeline-grid">
+
+                    <!-- COLUMNA TIMELINE (Izquierda) -->
+                    <div class="timeline-col">
+                        <div class="timeline-line"></div>
+                        <!-- Nodos específicos alineados -->
+                        <div class="timeline-node node-1"></div>
+                        <div class="timeline-node node-2"></div>
+                        <div class="timeline-node node-3"></div>
+                    </div>
+
+                    <!-- COLUMNA CONTENIDO (Derecha) -->
+                    <div class="content-col">
+
+                        <!-- SECCIÓN PAN DIARIO -->
+                        <div>
+                            <h2 class="section-title" id="titulo-pan-diario">Pan diario</h2>
+
+                            <!-- Tarjeta Versículo -->
+                            <div id="card-versiculo-dia" class="card-verse-day" onclick="App.abrirLecturaPanDiario()">
+                                <h3 id="ref-verso-dia">Oseas 2:14</h3>
+                                <p class="verse-text-anim" id="texto-verso-dia">"Pero he aquí que yo la atraeré y la
+                                    llevaré al desierto, y
+                                    hablaré a su corazón."</p>
+                                <button class="btn-share-verse" onclick="App.compartirPanDiario(event)">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <circle cx="18" cy="5" r="3"></circle>
+                                        <circle cx="6" cy="12" r="3"></circle>
+                                        <circle cx="18" cy="19" r="3"></circle>
+                                        <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                                        <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Tarjeta Reflexión -->
+                        <div class="card-reflection" onclick="App.mostrarReflexionCompleta()">
+                            <div class="reflection-info">
+                                <h4>Reflexión del día</h4>
+                                <p id="tema-reflexion-dia">Desarrolla una actitud reflexiva.</p>
+                                <span class="time-tag">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <polyline points="12 6 12 12 16 14"></polyline>
+                                    </svg>
+                                    2-3 minutos
+                                </span>
+                            </div>
+                            <img src="https://images.unsplash.com/photo-1532012197267-da84d127e765?auto=format&fit=crop&q=80&w=150"
+                                class="reflection-img" alt="Reflexión">
+                        </div>
+
+                        <!-- Tarjeta Oración (IMAGEN CORREGIDA) -->
+                        <div class="card-reflection" onclick="App.abrirOracion()">
+                            <img src="https://images.unsplash.com/photo-1491841550275-ad7854e35ca6?auto=format&fit=crop&q=80&w=150"
+                                class="reflection-img" style="margin-right: 15px; width: 60px; height: 60px;"
+                                alt="Oración">
+                            <div class="reflection-info" style="padding:0;">
+                                <h4 style="text-align: right;">Oración guiada</h4>
+                                <p id="tema-oracion-dia" style="margin:0; text-align: right;">Permite que él se acerque
+                                    a ti</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+               <div id="card-kerygma-hoy" class="banner-kerygma" onclick="Kerygma.abrir()">
+    <div class="kerygma-content">
+        <span class="kerygma-badge">IA Teológica</span>
+        <h3 class="kerygma-title">PROYECTO KERYGMA</h3>
+        <p class="kerygma-slogan">Anunciando la Palabra con eficacia.</p>
+    </div>
+</div>
+
+                <!-- 5. TARJETA CREADOR (Design Studio) -->
+                <div class="card-creator" onclick="App.abrirCreadorPremium()">
+                    <div class="creator-content">
+                        <span class="creator-badge">Noema Studio</span>
+                        <h3 class="creator-title">Creador de Imágenes</h3>
+                        <p class="creator-desc">Diseña versículos con estilo profesional.</p>
+                    </div>
+                    <div class="creator-icon">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#f1c40f" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 19l7-7 3 3-7 7-3-3z"></path>
+                            <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path>
+                            <path d="M2 2l7.586 7.586"></path>
+                            <circle cx="11" cy="11" r="2"></circle>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- 6. CARRUSEL VERSÍCULOS (Minimalista) -->
+                <div class="carousel-verses-container">
+                    <div class="carousel-header">
+                        <h3 class="carousel-title">Diseños del Día</h3>
+                    </div>
+                    <div class="carousel-verses">
+                        <!-- Item 1 -->
+                        <div class="verse-card-item"
+                            onclick="App.abrirImagenFull('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&q=80&w=800', 'Salmos 23:1', 'Jehová es mi pastor; nada me faltará.')">
+                            <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&q=80&w=300"
+                                class="verse-bg">
+                            <div class="verse-overlay"></div>
+                            <div class="verse-content-mini">
+                                <span class="verse-ref-mini">Salmos 23:1</span>
+                                <p class="verse-text-mini"></p>
+                            </div>
+                        </div>
+                        <!-- Item 2 -->
+                        <div class="verse-card-item"
+                            onclick="App.abrirImagenFull('https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?auto=format&fit=crop&q=80&w=800', 'Filipenses 4:13', 'Todo lo puedo en Cristo que me fortalece.')">
+                            <img src="https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?auto=format&fit=crop&q=80&w=300"
+                                class="verse-bg">
+                            <div class="verse-overlay"></div>
+                            <div class="verse-content-mini">
+                                <span class="verse-ref-mini">Filipenses 4:13</span>
+                                <p class="verse-text-mini"></p>
+                            </div>
+                        </div>
+                        <!-- Item 3 -->
+                        <div class="verse-card-item"
+                            onclick="App.abrirImagenFull('https://images.unsplash.com/photo-1472214103451-9374bd1c798e?auto=format&fit=crop&q=80&w=800', 'Juan 3:16', 'Porque de tal manera amó Dios al mundo...')">
+                            <img src="https://images.unsplash.com/photo-1472214103451-9374bd1c798e?auto=format&fit=crop&q=80&w=300"
+                                class="verse-bg">
+                            <div class="verse-overlay"></div>
+                            <div class="verse-content-mini">
+                                <span class="verse-ref-mini">Juan 3:16</span>
+                                <p class="verse-text-mini"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Espacio final -->
+                <div style="height: 30px;"></div>
+            </div>
+        </section>
+
+        <!-- VISTA ORACION (STORIES) -->
+        <div id="vista-oracion" class="stories-overlay" style="display: none;">
+            <!-- Barras de progreso -->
+            <div class="stories-progress-container" id="stories-progress-bars">
+                <!-- Se inyectan dinámicamente -->
+            </div>
+
+            <!-- Cabecera simple -->
+            <div class="stories-header">
+                <div class="stories-user-info">
+                    <div
+                        style="width:35px; height:35px; background:#8e44ad; border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-weight:bold;">
+                        N</div>
+                    <span style="margin-left:10px; font-weight:600; font-size:0.95rem;">Oración Guiada</span>
+                    <span class="stories-time" style="opacity:0.6; font-size:0.8rem; margin-left:10px;">Hoy</span>
+                </div>
+                <button class="stories-close-btn" onclick="App.cerrarOracion()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Contenido Slide -->
+            <div class="story-content-area" id="story-content-area">
+                <!-- Contenido dinámico -->
+                <h2 id="story-title" style="margin-bottom:20px; font-size:1.8rem;">Título</h2>
+                <p id="story-text" style="font-size:1.1rem; line-height:1.6;">Texto de la oración...</p>
+            </div>
+
+            <!-- Zonas de toque para navegación -->
+            <div class="story-touch-left" onclick="App.historiaAnterior()"></div>
+            <div class="story-touch-right" onclick="App.siguienteHistoria()"></div>
+        </div>
+
+<nav class="bottom-nav" style="display: flex; align-items: center; justify-content: space-around; height: 70px; padding: 0;">
+    
+    <button class="nav-item active" onclick="App.navegar('vista-inicio')" style="display: flex; flex-direction: column; align-items: center; justify-content: center; background: none; border: none;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="width: 24px; height: 24px; margin-bottom: 4px;">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+        </svg>
+        <span style="font-size: 10px;">Home</span>
+    </button>
+    
+    <button class="nav-item" onclick="App.navegar('vista-biblia')" style="display: flex; flex-direction: column; align-items: center; justify-content: center; background: none; border: none;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="width: 24px; height: 24px; margin-bottom: 4px;">
+            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+        </svg>
+        <span style="font-size: 10px;">Biblia</span>
+    </button>
+    
+    <button class="nav-item noema-btn-nav" onclick="App.abrirIA()" style="display: flex; flex-direction: column; align-items: center; justify-content: center; background: none; border: none;">
+        <span class="n-icon" style="font-size: 18px; font-weight: bold; margin-bottom: 4px;">N</span>
+        <span style="font-size: 10px;">Noema</span>
+    </button>
+    
+    <button class="nav-item" onclick="Configuracion.abrir()" style="display: flex; flex-direction: column; align-items: center; justify-content: center; background: none; border: none;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="width: 24px; height: 24px; margin-bottom: 4px;">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+        <span style="font-size: 10px;">Ajustes</span>
+    </button>
+</nav>
+
+        <section id="vista-biblia" class="vista">
+            <div class="header-isla-container">
+                <div class="header-isla">
+                    <div class="isla-selectores">
+                        <button id="btn-selector-libro" class="pill-white" onclick="Selector.abrir()">
+                            <span id="txt-libro-cap">Génesis 1</span> ▾
+                        </button>
+                        <button id="btn-selector-version" class="pill-glass"
+                            onclick="Lectura.abrirMenuVersiones(false)">RV1960</button>
+                    </div>
+                    <div class="isla-herramientas">
+                        <button class="icon-tool" onclick="App.toggleAjustes()" aria-label="Ajustes de texto">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M2 5h11"></path>
+                                <path d="M7.5 5v14"></path>
+                                <path d="M15 11h7"></path>
+                                <path d="M18.5 11v8"></path>
+                            </svg>
+                        </button>
+                        <button class="icon-tool" onclick="Notas.abrir()" aria-label="Notas">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                            </svg>
+                        </button>
+                        <button class="btn-noema-purple" onclick="App.abrirIA()">
+                            <span
+                                style="font-size: 10px; font-weight: 900; letter-spacing: 1px; display: block;">NÔEMA</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="ajustes-texto" class="popover hidden"
+                style="display: flex; flex-direction: row; align-items: center; justify-content: space-around; min-width: 140px; padding: 10px; border-radius: 25px; background: var(--card); border: 1px solid var(--border); box-shadow: 0 10px 25px rgba(0,0,0,0.2); position: absolute; top: 60px; right: 20px;">
+                <button onclick="Lectura.ajustarFuente(-10)"
+                    style="width: 35px; height: 35px; border-radius: 50%; border: 1px solid var(--border); background: var(--bg); color: var(--text); font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center;">A-</button>
+                <span id="indicador-fuente"
+                    style="font-weight: 800; font-size: 0.8rem; color: var(--text); min-width: 45px; text-align: center; font-family: sans-serif;">100%</span>
+                <button onclick="Lectura.ajustarFuente(10)"
+                    style="width: 35px; height: 35px; border-radius: 50%; border: 1px solid var(--border); background: var(--bg); color: var(--text); font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center;">A+</button>
+            </div>
+            <div id="contenedor-split">
+                <div id="scroll-wrapper-sup" class="panel-lectura">
+                    <div id="area-lectura"></div>
+                    <div class="navegacion-caps-integrada">
+                        <button onclick="Lectura.capituloAnterior()">❮</button>
+                        <button onclick="Lectura.capituloSiguiente()">❯</button>
+                    </div>
+                </div>
+                <div id="resizer-split" class="hidden">
+                    <div class="resizer-handle"></div>
+                </div>
+                <div id="area-lectura-secundaria" class="panel-lectura hidden" style="background: rgba(0,0,0,0.03);">
+                    <div style="text-align: center; padding: 40px; opacity: 0.6;">
+                        <p style="margin-bottom: 10px;">Comparar Versión</p>
+                        <button class="btn-primary" onclick="Selector.abrirVersiones(true)"
+                            style="padding: 8px 20px; font-size: 0.8rem;">Seleccionar</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="vista-devocional" class="vista">
+            <div id="contenido-devocional-detalle"
+                style="width: 100%; height: 100%; padding: 20px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+            </div>
+        </section>
+    </div>
+
+    <!-- =========================================
+         PANEL NOTIFICACIONES (LATERAL DERECHO)
+         ========================================= -->
+    <div id="panel-notificaciones" class="panel-lateral-derecho">
+        <div class="panel-header-notif">
+            <h3>Centro de Avisos</h3>
+            <button onclick="Notificaciones.cerrar()">✕</button>
+        </div>
+        <div class="panel-content-notif" id="lista-notificaciones">
+            <!-- Inyectado por JS -->
+        </div>
+    </div>
+
+    <div id="overlay-notif" class="overlay-full hidden" onclick="Notificaciones.cerrar()"></div>
+
+    <!-- =========================================
+         MODAL MI ESPACIO (NUEVO PERFIL)
+         ========================================= -->
+    <div id="modal-mi-espacio" class="modal-full hidden" style="z-index: 25000;">
+        <div class="ios-header">
+            <h2 class="ios-heading">Mi Espacio</h2>
+            <!-- Botón Cerrar eliminado por solicitud -->
+        </div>
+
+        <div style="padding: 20px; flex: 1; overflow-y: auto;">
+
+            <!-- Perfil Card -->
+            <div
+                style="background: var(--card); border-radius: 25px; padding: 25px; text-align: center; margin-bottom: 30px; border: 1px solid var(--border); box-shadow: var(--shadow);">
+                <img src="" id="avatar-mi-espacio"
+                    style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin-bottom: 15px; border: 2px solid var(--primary);">
+                <h3 id="nombre-mi-espacio" style="margin: 0 0 5px 0; font-size: 1.5rem;">Usuario</h3>
+                <p style="opacity: 0.6; margin: 0 0 20px 0;">Hijo de Dios</p>
+                <button class="btn-primary" onclick="App.abrirPerfil()"
+                    style="padding: 10px 20px; font-size: 0.9rem; border-radius: 20px;">Editar Perfil</button>
+            </div>
+
+            <!-- Menú de Accesos -->
+            <div style="display: flex; flex-direction: column; gap: 15px;">
+                <button onclick="Resaltados.abrir()"
+                    style="display: flex; align-items: center; padding: 18px; background: var(--card); border: 1px solid var(--border); border-radius: 18px; color: var(--text); font-weight: 600; cursor: pointer; gap: 15px;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" style="color: var(--primary);">
+                        <path d="m9 11-6 6v3h3l6-6" />
+                        <path d="m22 7-3-3" />
+                        <path d="M18 17.5 6.5 6 17 3l4 3 3 4-3 3.5Z" />
+                    </svg>
+                    Mis Resaltados
+                </button>
+                <button onclick="Historial.abrir()"
+                    style="display: flex; align-items: center; padding: 18px; background: var(--card); border: 1px solid var(--border); border-radius: 18px; color: var(--text); font-weight: 600; cursor: pointer; gap: 15px;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" style="color: var(--primary);">
+                        <circle cx="12" cy="12" r="10" />
+                        <polyline points="12 6 12 12 16 14" />
+                    </svg>
+                    Historial de Lectura
+                </button>
+                <button onclick="MisNotas.abrir()"
+                    style="display: flex; align-items: center; padding: 18px; background: var(--card); border: 1px solid var(--border); border-radius: 18px; color: var(--text); font-weight: 600; cursor: pointer; gap: 15px;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" style="color: var(--primary);">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                        <polyline points="14 2 14 8 20 8" />
+                        <line x1="16" y1="13" x2="8" y2="13" />
+                        <line x1="16" y1="17" x2="8" y2="17" />
+                        <polyline points="10 9 9 9 8 9" />
+                    </svg>
+                    Mis Notas
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="modal-selector" class="modal-full hidden">
+        <div class="selector-tabs" style="margin-top: 20px;">
+            <button id="tab-libros" class="tab active" onclick="Selector.verTab('libros')">Libro</button>
+            <button id="tab-caps" class="tab" onclick="Selector.verTab('caps')">Capítulo</button>
+            <button id="tab-vers" class="tab" onclick="Selector.verTab('vers')">Versículo</button>
+            <button class="close-btn" onclick="Selector.cerrar()"
+                style="margin-left:auto; background:none; border:none; font-size:1.5rem; color:var(--text); padding-right: 20px;">×</button>
+        </div>
+
+        <style>
+            .premium-search-container {
+                position: relative;
+                margin: 5px 0 15px 0;
+                width: 100%;
+            }
+
+            .premium-search-input {
+                width: 100%;
+                height: 45px;
+                border-radius: 50px;
+                background: rgba(10, 10, 10, 0.5);
+                backdrop-filter: blur(12px);
+                -webkit-backdrop-filter: blur(12px);
+                border: 1px solid rgba(142, 68, 173, 0.4);
+                box-shadow: 0 0 15px rgba(142, 68, 173, 0.1);
+                color: white;
+                padding-left: 48px;
+                padding-right: 20px;
+                font-family: 'Montserrat', sans-serif;
+                font-size: 0.95rem;
+                outline: none;
+                transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            }
+
+            .premium-search-input::placeholder {
+                color: rgba(255, 255, 255, 0.4);
+                font-weight: 300;
+            }
+
+            .premium-search-input:focus {
+                background: rgba(10, 10, 10, 0.85);
+                border-color: #8e44ad;
+                box-shadow: 0 0 25px rgba(142, 68, 173, 0.6), inset 0 0 10px rgba(142, 68, 173, 0.2);
+                transform: scale(1.01);
+            }
+
+            .premium-search-icon {
+                position: absolute;
+                left: 18px;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 18px;
+                height: 18px;
+                opacity: 0.7;
+                pointer-events: none;
+                transition: all 0.3s ease;
+            }
+
+            .premium-search-icon path {
+                fill: #8e44ad;
+                filter: drop-shadow(0 0 5px rgba(142, 68, 173, 0.8));
+            }
+
+            .premium-search-input:focus~.premium-search-icon {
+                opacity: 1;
+                transform: translateY(-50%) scale(1.1);
+            }
+        </style>
+        <div id="search-container" style="padding: 0 20px 10px 20px;">
+            <div class="premium-search-container">
+                <input type="text" id="input-busqueda-libros" class="premium-search-input" placeholder="Buscar libro..."
+                    oninput="Selector.filtrarLibros(this.value)">
+                <svg class="premium-search-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd"
+                        d="M11 4C7.13401 4 4 7.13401 4 11C4 14.866 7.13401 18 11 18C12.933 18 14.683 17.2199 15.952 15.952L18.293 18.293C18.684 18.684 19.317 18.684 19.707 18.293C20.098 17.902 20.098 17.269 19.707 16.878L17.366 14.537C18.423 13.565 19.034 12.227 19.034 10.966C19.034 7.13401 15.866 4 11 4ZM6 11C6 8.23858 8.23858 6 11 6C13.7614 6 16 8.23858 16 11C16 13.7614 13.7614 16 11 16C8.23858 16 6 13.7614 6 11Z" />
+                </svg>
+            </div>
+        </div>
+        <div id="lista-selector" class="lista-items"
+            style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; padding: 10px 20px; align-content: start;">
+        </div>
+    </div>
+
+    <div id="vista-kerygma" class="modal-full hidden"
+        style="background: var(--bg); z-index: 15000; display: flex; flex-direction: column;">
+
+        <div
+            style="padding: 15px 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: center; align-items: center; background: rgba(0,0,0,0.2);">
+            <h3 style="margin: 0; font-family: 'Cinzel', serif; color: #8e44ad; letter-spacing: 2px;">KERYGMA <span
+                    style="font-size: 0.7em; opacity: 0.7;">MENTOR</span></h3>
+            <button onclick="document.getElementById('vista-kerygma').classList.add('hidden')"
+                style="position: absolute; right: 15px; background: none; border: none; color: var(--text); font-size: 1.5rem; cursor: pointer;">×</button>
+        </div>
+
+        <div id="kerygma-chat-history"
+            style="flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px; scroll-behavior: smooth;">
+        </div>
+
+        <div id="kerygma-input-area"
+            style="padding: 20px; background: rgba(0,0,0,0.5); backdrop-filter: blur(10px); border-top: 1px solid rgba(255,255,255,0.05);">
+            <div style="position: relative; width: 100%; max-width: 600px; margin: 0 auto;">
+                <input type="text" id="k-input-chat" placeholder="Escribe tu respuesta..."
+                    onkeydown="if(event.key === 'Enter') Kerygma.enviarMensaje()" style="width: 100%; height: 50px; padding-left: 25px; padding-right: 55px; border-radius: 50px; 
+                           background: rgba(255,255,255,0.05); border: 1px solid rgba(142,68,173,0.5); 
+                           color: white; font-size: 1rem; outline: none; transition: all 0.3s ease;
+                           box-shadow: 0 0 15px rgba(142, 68, 173, 0.4);">
+
+                <button onclick="Kerygma.enviarMensaje()" style="position: absolute; right: 5px; top: 5px; width: 40px; height: 40px; 
+                           background: #8e44ad; color: white; border: none; border-radius: 50%; 
+                           cursor: pointer; display: flex; align-items: center; justify-content: center;
+                           box-shadow: 0 0 10px rgba(142,68,173,0.5); z-index: 20;">
+                    ➤
+                </button>
+            </div>
+        </div>
+    </div>
+    <div id="modal-versiones" class="modal-centro hidden">
+        <div class="card-modal">
+            <h3>Versión de la Biblia</h3>
+            <div class="lista-versiones" style="display: flex; flex-direction: column; gap: 10px;">
+                <button class="btn-primary" onclick="Lectura.cambiarVersion('RV1960')">Reina Valera 1960</button>
+                <button class="btn-primary" onclick="Lectura.cambiarVersion('PDT')">Palabra de Dios para Todos</button>
+                <button class="btn-primary" onclick="Lectura.cambiarVersion('TLA')">Traducción en Lenguaje
+                    Actual</button>
+            </div>
+            <button onclick="document.getElementById('modal-versiones').classList.add('hidden')"
+                style="margin-top:15px; background:none; border:none; color:var(--text); width: 100%;">Cerrar</button>
+        </div>
+    </div>
+    <div id="modal-config" class="modal-full hidden"
+        style="background: var(--bg); z-index: 30000; display: flex; flex-direction: column;">
+
+        <style>
+            /* ESTILOS PREMIUM MENU AJUSTES */
+
+
+            .premium-section-title {
+                font-size: 0.75rem;
+                font-weight: 800;
+                text-transform: uppercase;
+                letter-spacing: 1.5px;
+                opacity: 0.5;
+                margin: 20px 0 10px 10px;
+                color: var(--text);
+            }
+
+            .premium-card-group {
+                background: rgba(255, 255, 255, 0.03);
+                /* Glass like container */
+                border-radius: 20px;
+                overflow: hidden;
+                border: 1px solid rgba(255, 255, 255, 0.05);
+            }
+
+            .premium-item {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 18px 20px;
+                background: transparent;
+                border: none;
+                width: 100%;
+                color: var(--text);
+                text-align: left;
+                cursor: pointer;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+                transition: background 0.2s;
+            }
+
+            .premium-item:last-child {
+                border-bottom: none;
+            }
+
+            .premium-item:active {
+                background: rgba(255, 255, 255, 0.05);
+            }
+
+            .premium-icon-box {
+                width: 36px;
+                height: 36px;
+                border-radius: 10px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-right: 15px;
+                font-size: 1.2rem;
+            }
+
+            .icon-purple {
+                background: rgba(142, 68, 173, 0.2);
+                color: #9b59b6;
+            }
+
+            .icon-blue {
+                background: rgba(52, 152, 219, 0.2);
+                color: #3498db;
+            }
+
+            .icon-green {
+                background: rgba(46, 204, 113, 0.2);
+                color: #2ecc71;
+            }
+
+            .icon-red {
+                background: rgba(231, 76, 60, 0.2);
+                color: #e74c3c;
+            }
+
+            .premium-item-text {
+                flex: 1;
+            }
+
+            .premium-title {
+                font-size: 1rem;
+                font-weight: 500;
+                display: block;
+            }
+
+            .premium-subtitle {
+                font-size: 0.75rem;
+                opacity: 0.6;
+                display: block;
+                margin-top: 2px;
+            }
+
+            /* SWITCH ESTILIZADO */
+            .switch-premium {
+                position: relative;
+                display: inline-block;
+                width: 50px;
+                height: 28px;
+            }
+
+            .switch-premium input {
+                opacity: 0;
+                width: 0;
+                height: 0;
+            }
+
+            .slider-premium {
+                position: absolute;
+                cursor: pointer;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-color: rgba(120, 120, 128, 0.3);
+                /* iOS style gray */
+                transition: .4s;
+                border-radius: 34px;
+            }
+
+            .slider-premium:before {
+                position: absolute;
+                content: "";
+                height: 24px;
+                width: 24px;
+                left: 2px;
+                bottom: 2px;
+                background-color: white;
+                transition: .4s;
+                border-radius: 50%;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            }
+
+            input:checked+.slider-premium {
+                background-color: #34c759;
+                /* iOS Green */
+            }
+
+            input:checked+.slider-premium:before {
+                transform: translateX(22px);
+            }
+
+            /* STEPPER PARA FUENTE */
+            .stepper-container {
+                background: rgba(120, 120, 128, 0.2);
+                border-radius: 10px;
+                padding: 2px;
+                display: flex;
+                align-items: center;
+            }
+
+            .stepper-btn {
+                width: 32px;
+                height: 32px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border: none;
+                background: white;
+                border-radius: 7px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                color: black;
+                font-weight: bold;
+                cursor: pointer;
+            }
+
+            .stepper-btn:active {
+                transform: scale(0.95);
+            }
+
+            body.dark-mode .stepper-btn {
+                background: #636366;
+                color: white;
+            }
+        </style>
+
+        <div style="padding: 20px; display: flex; align-items: center; justify-content: space-between;">
+            <h2
+                style="margin: 0; font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 1.8rem; letter-spacing: -1px;">
+                Ajustes</h2>
+            <button onclick="Configuracion.cerrar()"
+                style="background: rgba(120, 120, 128, 0.2); border: none; width: 36px; height: 36px; border-radius: 50%; color: var(--text); font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center;">✕</button>
+        </div>
+
+        <div style="flex: 1; overflow-y: auto; padding: 0 20px 40px 20px;">
+
+
+
+            <div class="premium-section-title">Visual</div>
+            <div class="premium-card-group">
+                <div class="premium-item" style="cursor: default;">
+                    <div style="display: flex; align-items: center;">
+                        <div class="premium-icon-box icon-purple">🌙</div>
+                        <span class="premium-title">Modo Oscuro</span>
+                    </div>
+                    <label class="switch-premium">
+                        <input type="checkbox" id="switch-modo-oscuro" onchange="App.toggleModoOscuro()">
+                        <span class="slider-premium"></span>
+                    </label>
+                </div>
+                <div class="premium-item" style="cursor: default;">
+                    <div style="display: flex; align-items: center;">
+                        <div class="premium-icon-box icon-blue">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M2 12h20"></path>
+                                <path d="M6 12v-2"></path>
+                                <path d="M10 12v-4"></path>
+                                <path d="M14 12v-2"></path>
+                                <path d="M18 12v-4"></path>
+                            </svg>
+                        </div>
+                        <span class="premium-title">Tamaño Barra Superior</span>
+                    </div>
+                    <div class="stepper-container">
+                        <button onclick="App.ajustarBarra(-10)" class="stepper-btn">-</button>
+                        <span id="conf-indicador-barra"
+                            style="font-weight: 600; font-size: 0.9rem; min-width: 45px; text-align: center; opacity: 0.8;">100%</span>
+                        <button onclick="App.ajustarBarra(10)" class="stepper-btn">+</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="premium-section-title">Información</div>
+            <div class="premium-card-group">
+                <button class="premium-item" onclick="Configuracion.verGuia()">
+                    <div style="display: flex; align-items: center;">
+                        <div class="premium-icon-box icon-green">📖</div>
+                        <span class="premium-title">Manual de Uso</span>
+                    </div>
+                    <span style="opacity: 0.3;">➜</span>
+                </button>
+                <button class="premium-item" onclick="Configuracion.verAcercaDe()">
+                    <div style="display: flex; align-items: center;">
+                        <div class="premium-icon-box icon-blue">🕊️</div>
+                        <span class="premium-title">Acerca de Nôema</span>
+                    </div>
+                    <span style="opacity: 0.3;">➜</span>
+                </button>
+            </div>
+
+            <div class="premium-section-title">Sistema</div>
+            <div class="premium-card-group">
+                <button class="premium-item" onclick="Configuracion.reiniciarApp()">
+                    <div style="display: flex; align-items: center;">
+                        <div class="premium-icon-box icon-red">🔄</div>
+                        <div class="premium-item-text">
+                            <span class="premium-title" style="color: #e74c3c;">Buscar Actualizaciones</span>
+                            <span class="premium-subtitle">Recargar aplicación</span>
+                        </div>
+                    </div>
+                </button>
+            </div>
+
+            <div
+                style="text-align: center; opacity: 0.3; font-size: 0.75rem; margin-top: 40px; font-weight: 600; letter-spacing: 1px;">
+                NÔEMA v5.0.2 • PREMIUM
+            </div>
+
+        </div>
+    </div>
+    <div id="modal-perfil" class="modal-centro hidden">
+        <div class="card-modal" style="text-align: left; max-width: 350px; width: 90%;">
+            <h3 style="text-align: center; margin-bottom: 20px;">Editar Perfil</h3>
+            <div class="avatar-wrapper" onclick="document.getElementById('input-foto-edit').click()"
+                style="margin: 0 auto 20px; display:block; width:100px; height:100px; position:relative; cursor: pointer;">
+                <img id="img-perfil-edit" src=""
+                    style="width:100px; height:100px; border-radius:50%; object-fit:cover; border: 2px solid #8e44ad;">
+                <div
+                    style="position:absolute; bottom:0; right:0; background:#8e44ad; color:white; border-radius:50%; width:30px; height:30px; display:flex; align-items:center; justify-content:center; font-size:14px; border:2px solid white;">
+                    📷</div>
+            </div>
+            <input type="file" id="input-foto-edit" hidden accept="image/*"
+                onchange="App.procesarFoto(this, 'img-perfil-edit')">
+            <div style="display:flex; flex-direction:column; gap:15px;">
+                <div>
+                    <label
+                        style="font-size:0.85rem; font-weight:bold; margin-bottom:5px; display:block; opacity:0.7;">Tu
+                        Nombre</label>
+                    <input type="text" id="input-nombre-edit" placeholder="Tu nombre"
+                        style="width:100%; padding:10px; border-radius:10px; border:1px solid #ccc; background:var(--bg); color:var(--text); box-sizing:border-box;">
+                </div>
+                <div>
+                    <label
+                        style="font-size:0.85rem; font-weight:bold; margin-bottom:5px; display:block; opacity:0.7;">Género</label>
+                    <select id="select-genero"
+                        style="width:100%; padding:10px; border-radius:10px; border:1px solid #ccc; background:var(--bg); color:var(--text); box-sizing:border-box;">
+                        <option value="" disabled selected hidden>Selecciona tu género</option>
+                        <option value="nodecirlo">Prefiero no decirlo</option>
+                        <option value="hombre">Soy Hombre</option>
+                        <option value="mujer">Soy Mujer</option>
+                    </select>
+                </div>
+                <div>
+                    <label
+                        style="font-size:0.85rem; font-weight:bold; margin-bottom:5px; display:block; opacity:0.7;">Fecha
+                        de Nacimiento</label>
+                    <input type="date" id="input-cumple"
+                        style="width:100%; padding:10px; border-radius:10px; border:1px solid #ccc; background:var(--bg); color:var(--text); box-sizing:border-box;">
+                </div>
+            </div>
+            <div style="display: flex; justify-content: space-between; gap: 10px; margin-top: 25px;">
+                <button
+                    onclick="document.getElementById('modal-perfil').classList.add('hidden'); App.cerrarPerfil && App.cerrarPerfil();"
+                    style="background:transparent; border:none; color:var(--text); cursor:pointer;">Cancelar</button>
+                <button onclick="App.guardarPerfilEditado()"
+                    style="background:#8e44ad; color:white; border:none; padding:10px 25px; border-radius:10px; font-weight:bold; cursor:pointer; box-shadow: 0 4px 10px rgba(142,68,173,0.3);">Guardar</button>
+            </div>
+        </div>
+    </div>
+    <div id="modal-resaltados" class="modal-full hidden">
+
+        <div id="lista-resaltados" class="contenedor-principal" style="padding-top: 20px;"></div>
+        <button onclick="document.getElementById('modal-resaltados').classList.add('hidden')"
+            style="position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:#333; color:white; padding:10px 20px; border-radius:20px;">Cerrar</button>
+    </div>
+    <div id="modal-mis-notas" class="modal-full hidden">
+
+        <div id="lista-notas-guardadas" class="contenedor-principal" style="padding-top: 20px;"></div>
+        <button onclick="document.getElementById('modal-mis-notas').classList.add('hidden')"
+            style="position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:#333; color:white; padding:10px 20px; border-radius:20px;">Cerrar</button>
+    </div>
+    <div id="modal-historial" class="modal-full hidden">
+
+        <div class="contenedor-principal" style="padding-top: 20px;">
+            <div id="lista-historial"></div>
+            <button onclick="Historial.limpiar()"
+                style="width:100%; padding:15px; background:none; border:none; color:red; font-weight:bold; margin-top:20px; opacity:0.7;">Borrar
+                Historial</button>
+            <button onclick="document.getElementById('modal-historial').classList.add('hidden')"
+                style="width:100%; padding:15px; background:none; border:none; color:var(--text); font-weight:bold; margin-top:10px;">Cerrar</button>
+        </div>
+    </div>
+    <div id="panel-ia" class="bottom-sheet">
+        <div class="sheet-handle"></div>
+        <div id="panel-sugerencias" class="sugerencias-container">
+        </div>
+        <div id="chat-historial"></div>
+        <div class="chat-input-wrapper">
+            <input type="text" id="input-ia" placeholder="Pregunta a Nôema...">
+            <button onclick="IA.enviar()">➤</button>
+        </div>
+    </div>
+    <div id="barra-acciones" class="barra-flotante">
+        <div class="barra-header">
+            <button class="btn-accion" onclick="IA.explicarSeleccion(); Lectura.cerrarSeleccion()"
+                style="display: flex; align-items: center; gap: 5px; opacity: 1;"><span
+                    style="color: #f1c40f; font-size: 1.2rem;">◇</span> <span class="logo-barra">NÔEMA</span></button>
+            <button class="btn-accion" onclick="Lectura.copiar(); Lectura.cerrarSeleccion()">COPIAR</button>
+
+            <div class="colores-resaltado">
+                <div class="punto-color" style="background: #f1c40f;"
+                    onclick="Lectura.resaltar('rgba(241, 196, 15, 0.3)'); Lectura.cerrarSeleccion()"></div>
+                <div class="punto-color" style="background: #2ecc71;"
+                    onclick="Lectura.resaltar('rgba(46, 204, 113, 0.3)'); Lectura.cerrarSeleccion()"></div>
+                <div class="punto-color" style="background: #3498db;"
+                    onclick="Lectura.resaltar('rgba(52, 152, 219, 0.3)'); Lectura.cerrarSeleccion()"></div>
+                <div class="punto-color" style="background: #e74c3c;"
+                    onclick="Lectura.resaltar('rgba(231, 76, 60, 0.3)'); Lectura.cerrarSeleccion()"></div>
+                <div class="punto-color" style="background: #ff85a2;"
+                    onclick="Lectura.resaltar('rgba(255, 133, 162, 0.3)'); Lectura.cerrarSeleccion()"></div>
+            </div>
+        </div>
+        <div class="barra-footer">
+
+            <button class="btn-accion"
+                onclick="EditorAutonomo.abrir(State.selTexto, State.selRef); Lectura.cerrarSeleccion()">IMAGEN</button>
+            <span class="separador">|</span>
+            <button class="btn-accion" onclick="Lectura.compartir(); Lectura.cerrarSeleccion()">COMPARTIR</button>
+            <button class="btn-borrar"
+                onclick="Lectura.resaltar('transparent'); Lectura.cerrarSeleccion()">BORRAR</button>
+        </div>
+    </div>
+    <div id="win-notas" class="sheet-notas ios-notes-theme">
+        <div class="sheet-handle"></div>
+
+        <div class="win-header ios-header">
+            <h2 class="ios-heading">Notas</h2>
+            <button
+                onclick="if(typeof Notas.guardarFinal === 'function'){Notas.guardarFinal()}else{alert('Guardado (Simulación)'); Notas.cerrar()}"
+                class="btn-save ios-save-btn">Guardar</button>
+        </div>
+
+        <div class="ios-toolbar-wrapper">
+            <div id="toolbar-formato" class="ios-toolbar">
+                <div class="tool-group">
+                    <button class="ios-btn-tool bold" onclick="Notas.formato('bold')">B</button>
+                    <button class="ios-btn-tool italic" onclick="Notas.formato('italic')">I</button>
+                    <button class="ios-btn-tool underline" onclick="Notas.formato('underline')">U</button>
+                </div>
+
+                <div class="ios-divider"></div>
+
+                <div class="tool-group">
+                    <button class="ios-btn-tool" onclick="Notas.formato('insertUnorderedList')">≡</button>
+                    <button class="ios-btn-tool" onclick="Notas.formato('insertOrderedList')">1.</button>
+                </div>
+
+                <div class="ios-divider"></div>
+
+                <div class="tool-group colors">
+                    <button class="color-dot yellow" onclick="Notas.setColor('#f1c40f')"></button>
+                    <button class="color-dot red" onclick="Notas.setColor('#e74c3c')"></button>
+                    <button class="color-dot blue" onclick="Notas.setColor('#3498db')"></button>
+                </div>
+            </div>
+        </div>
+
+        <div class="ios-content-area">
+            <input type="text" id="nota-titulo" placeholder="Título de tu nota..." class="ios-input-title">
+            <div id="nota-cuerpo" class="ios-textarea" contenteditable="true" placeholder="Escribe aquí..."></div>
+        </div>
+    </div>
+    <div id="modal-acerca" class="modal-full hidden"
+        style="background: rgba(0,0,0,0.95); z-index: 40000; align-items: center; justify-content: center; display: flex;">
+        <div
+            style="background: var(--card); width: 85%; max-width: 400px; padding: 25px; border-radius: 20px; text-align: center; border: 1px solid var(--border); max-height: 80vh; overflow-y: auto;">
+            <div style="font-size: 3rem; margin-bottom: 10px;">🕊️</div>
+            <h3 style="color: #8e44ad; font-family: 'Cinzel'; margin-top: 0;">Sobre el Proyecto</h3>
+            <p id="cuerpo-acerca"
+                style="white-space: pre-wrap; line-height: 1.6; font-size: 0.9rem; text-align: left; color: var(--text);">
+            </p>
+            <button onclick="document.getElementById('modal-acerca').classList.add('hidden')" class="btn-primary"
+                style="width: 100%; margin-top: 15px; padding: 12px; border-radius: 10px;">Cerrar</button>
+        </div>
+    </div>
+    <div id="modal-recorte" class="modal-full hidden"
+        style="background: black; z-index: 25000; position: fixed; inset: 0; display: none; align-items: center; justify-content: center;">
+        <div style="text-align: center; width: 100%;">
+
+            <h3 style="color: white; margin-bottom: 30px; font-family: 'Montserrat', sans-serif;">Ajusta tu foto</h3>
+
+            <div id="contenedor-canvas-recorte"
+                style="width: 280px; height: 280px; margin: 0 auto; border-radius: 50%; overflow: hidden; border: 2px solid #8e44ad; position: relative; background: #111; touch-action: none; box-shadow: 0 0 30px rgba(142,68,173,0.3);">
+                <canvas id="canvas-crop"></canvas>
+            </div>
+
+            <p style="color: #888; font-size: 0.85rem; margin-top: 40px; opacity: 0.7;">
+                Pellizca para Zoom • Arrastra para mover
+            </p>
+
+            <div style="display: flex; justify-content: center; gap: 40px; margin-top: 40px;">
+                <button onclick="Editor.cerrar()"
+                    style="background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2); width:60px; height:60px; border-radius:50%; cursor: pointer; font-size: 1.2rem; display: flex; align-items: center; justify-content: center; transition: 0.2s;">
+                    ✕
+                </button>
+                <button onclick="Editor.guardar()"
+                    style="background: #8e44ad; color: white; border:none; width:60px; height:60px; border-radius:50%; cursor: pointer; font-size: 1.2rem; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 20px rgba(142,68,173,0.5); transition: 0.2s;">
+                    ✔
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-cumple" class="modal-full hidden"
+        style="background: rgba(0,0,0,0.95); z-index: 60000; align-items: center; justify-content: center; display: flex;">
+        <div class="glass-premium"
+            style="width: 85%; max-width: 350px; padding: 30px; border-radius: 25px; text-align: center; border: 1px solid rgba(255,255,255,0.1);">
+            <div style="font-size: 4rem; margin-bottom: 10px;">🎉</div>
+            <h3 style="font-family: 'Cinzel'; color: #8e44ad; margin: 0; font-size: 1.5rem;">¡Feliz Cumpleaños!</h3>
+            <p id="cumple-nombre" style="color: var(--text); font-weight: bold; margin-top: 5px; opacity: 0.8;"></p>
+
+            <div
+                style="margin: 25px 0; padding: 20px; background: rgba(142, 68, 173, 0.05); border-radius: 15px; border: 1px solid rgba(142, 68, 173, 0.1);">
+                <p id="cumple-verso"
+                    style="font-family: 'Lora', serif; font-style: italic; color: var(--text); font-size: 1.1rem; line-height: 1.6;">
+                    "Jehová te bendiga, y te guarde; Jehová haga resplandecer su rostro sobre ti."
+                </p>
+                <p id="cumple-ref" style="font-size: 0.8rem; font-weight: bold; margin-top: 10px; color: #8e44ad;">
+                    Números 6:24-25
+                </p>
+            </div>
+
+            <button onclick="document.getElementById('modal-cumple').classList.add('hidden')"
+                style="background: #8e44ad; color: white; border: none; padding: 12px 30px; border-radius: 25px; font-weight: bold; font-size: 1rem; cursor: pointer; box-shadow: 0 4px 15px rgba(142,68,173,0.4);">
+                Amén
+            </button>
+        </div>
+    </div>
+    <div id="overlay" class="hidden"></div>
+
+    <div id="modal-creador-premium" class="modal-full hidden"
+        style="background: #000; z-index: 50000; flex-direction: column;">
+
+        <div
+            style="flex: 1; display: flex; align-items: center; justify-content: center; padding: 20px; background: #111; position: relative; overflow: hidden;">
+            <canvas id="canvas-premium"
+                style="max-width: 100%; max-height: 70vh; box-shadow: 0 0 50px rgba(0,0,0,0.5); transition: all 0.5s ease;"></canvas>
+        </div>
+
+        <div class="glass-premium panel-smooth"
+            style="border-radius: 25px 25px 0 0; padding: 25px; max-height: 50vh; overflow-y: auto;">
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <button onclick="document.getElementById('modal-creador-premium').classList.add('hidden')"
+                    style="background: none; border: none; color: var(--text); font-size: 1.2rem;">✕</button>
+                <h3 style="font-family: 'Cinzel'; color: #8e44ad; margin: 0; font-size: 0.9rem; letter-spacing: 1px;">
+                    ESTUDIO DE DISEÑO</h3>
+                <div style="display:flex; gap:10px">
+                    <button onclick="EditorAutonomo.compartir()"
+                        style="background: #f1c40f; color: black; border: none; padding: 8px 15px; border-radius: 20px; font-weight: bold; font-size: 0.8rem; box-shadow: 0 4px 15px rgba(241,196,15,0.4);">COMPARTIR</button>
+                    <button onclick="EditorAutonomo.guardar()"
+                        style="background: #8e44ad; color: white; border: none; padding: 8px 15px; border-radius: 20px; font-weight: bold; font-size: 0.8rem; box-shadow: 0 4px 15px rgba(142,68,173,0.4);">GUARDAR</button>
+                </div>
+            </div>
+
+            <div id="premium-gallery" style="margin-bottom: 20px;">
+                <p style="font-size: 0.75rem; opacity: 0.6; margin: 0 0 10px;">Selecciona un fondo:</p>
+
+                <div id="galeria-fondos-scroll"
+                    style="display: flex; gap: 10px; overflow-x: auto; padding-bottom: 10px; scroll-behavior: smooth;">
+                </div>
+            </div>
+
+            <div id="premium-tools-container">
+
+                <div style="display: flex; justify-content: center; gap: 20px; margin-bottom: 20px;">
+                    <div onclick="EditorAutonomo.setFormato(1080, 1080)" class="icon-format active" title="Cuadrado">
+                        <div style="width: 20px; height: 20px; border: 2px solid currentColor; border-radius: 2px;">
+                        </div>
+                    </div>
+                    <div onclick="EditorAutonomo.setFormato(1080, 1920)" class="icon-format" title="Historia">
+                        <div style="width: 14px; height: 24px; border: 2px solid currentColor; border-radius: 2px;">
+                        </div>
+                    </div>
+                    <div onclick="EditorAutonomo.setFormato(1080, 1350)" class="icon-format" title="Retrato">
+                        <div style="width: 18px; height: 24px; border: 2px solid currentColor; border-radius: 2px;">
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <input type="text" id="premium-text-input" placeholder="Edita el texto aquí..."
+                        oninput="EditorAutonomo.update('text', this.value)"
+                        style="width: 100%; padding: 12px; border-radius: 12px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; font-family: sans-serif;">
+                </div>
+
+                <div style="margin-bottom: 20px;">
+
+                    <div class="control-group"><label>Brillo</label>
+                        <input type="range" min="50" max="150" value="100" class="slider-noma"
+                            oninput="EditorAutonomo.update('brightness', this.value)">
+                    </div>
+                    <div class="control-group"><label>Contraste</label>
+                        <input type="range" min="50" max="150" value="100" class="slider-noma"
+                            oninput="EditorAutonomo.update('contrast', this.value)">
+                    </div>
+
+                    <div class="control-group"><label>Vignette (Bordes)</label>
+                        <input type="range" min="0" max="1" step="0.1" value="0.3" class="slider-noma"
+                            oninput="EditorAutonomo.update('vignette', this.value)">
+                    </div>
+                    <div class="control-group"><label>Desenfoque</label>
+                        <input type="range" min="0" max="10" step="0.5" value="0" class="slider-noma"
+                            oninput="EditorAutonomo.update('blur', this.value)">
+                    </div>
+
+                    <div class="control-group"><label>Espaciado Letras</label>
+                        <input type="range" min="0" max="20" step="1" value="0" class="slider-noma"
+                            oninput="EditorAutonomo.update('spacing', this.value)">
+                    </div>
+                    <div class="control-group"><label>Tamaño Texto (Nuevo)</label>
+                        <input type="range" min="20" max="120" value="50" class="slider-noma"
+                            oninput="EditorAutonomo.update('fontSize', this.value)">
+                    </div>
+                </div>
+
+                <p style="font-size: 0.75rem; opacity: 0.6; margin: 15px 0 10px;">TIPOGRAFÍA</p>
+                <div style="display: flex; gap: 10px; overflow-x: auto; padding-bottom: 10px;">
+                    <button onclick="EditorAutonomo.setFont('Cinzel')" class="pill-font">Sana Doctrina</button>
+                    <button onclick="EditorAutonomo.setFont('Lora')" class="pill-font">Devoción</button>
+                    <button onclick="EditorAutonomo.setFont('Montserrat')" class="pill-font">Contemporáneo</button>
+                    <button onclick="EditorAutonomo.setFont('Oswald')" class="pill-font">Impacto</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Lista de archivos a cargar
+        var misArchivos = [
+            "biblia.js",
+            "PDT.js",
+            "TLA.js",
+            "app.js",
+            "ia.js",
+            "kerygma.js"
+        ];
+
+        // Este bucle escribe las etiquetas <script> con la versión automáticamente
+        misArchivos.forEach(function (archivo) {
+            document.write('<script src="' + archivo + '?v=' + version + '"><\/script>');
+        });
+    </script>
+    <script>
+        // SCRIPT AUTÓNOMO DEL EDITOR
+
+        // GESTOS TÁCTILES CORREGIDOS Y ROBUSTOS
+        (function () {
+            function activarGestos(idPanel, funcionCerrar) {
+                const panel = document.getElementById(idPanel);
+                const handle = panel ? panel.querySelector('.sheet-handle') : null;
+                if (!panel || !handle) return;
+                let startY = 0; let currentY = 0; let isDragging = false;
+
+                handle.addEventListener('touchstart', (e) => {
+                    startY = e.touches[0].clientY;
+                    currentY = startY;
+                    isDragging = true;
+                    panel.style.transition = 'none';
+                }, { passive: false });
+
+                handle.addEventListener('touchmove', (e) => {
+                    if (!isDragging) return;
+                    currentY = e.touches[0].clientY;
+                    const diff = currentY - startY;
+                    if (diff >= 0) {
+                        e.preventDefault();
+                        panel.style.transform = `translateY(${diff}px)`;
+                    }
+                }, { passive: false });
+
+                handle.addEventListener('touchend', (e) => {
+                    if (!isDragging) return;
+                    isDragging = false;
+                    panel.style.transition = 'transform 0.4s cubic-bezier(0.23, 1, 0.32, 1)';
+                    const diff = currentY - startY;
+
+                    // Si ha bajado más de 80 píxeles, CERRAMOS de verdad
+                    if (diff > 80) {
+                        panel.style.transform = `translateY(100%)`; // Forzamos que desaparezca visualmente
+                        setTimeout(() => {
+                            funcionCerrar(); // Ejecutamos la función que cierra el modal en tu app.js
+                            panel.style.transform = ''; // Reseteamos posición para la próxima vez
+                        }, 300);
+                    } else {
+                        panel.style.transform = ''; // Lo devolvemos a su lugar
+                    }
+                });
+            }
+
+            window.addEventListener('load', () => {
+
+                // Activar gestos en Chat y Notas
+                activarGestos('panel-ia', () => {
+                    if (typeof App !== 'undefined' && App.cerrarIA) App.cerrarIA();
+                    else { document.getElementById('panel-ia').classList.remove('active'); document.getElementById('overlay').classList.add('hidden'); }
+                });
+
+                activarGestos('win-notas', () => {
+                    if (typeof Notas !== 'undefined' && Notas.cerrar) Notas.cerrar();
+                    else { document.getElementById('win-notas').style.transform = 'translateY(100%)'; }
+                });
+            });
+        })();
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js'));
+        }
+        // Motor de búsqueda de libros corregido
+        // Importante: Selector se define en app.js, pero esto actúa de respaldo/parche
+        // si el objeto Selector ya existe o para agregarlo.
+        window.Selector = window.Selector || {};
+        window.Selector.filtrarLibros = function (query) {
+            const contenedor = document.getElementById('lista-selector');
+            if (!contenedor) return;
+
+            // 1. Limpiamos la búsqueda (minúsculas y sin tildes)
+            const busqueda = query.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+            // 2. Buscamos TODOS los botones de libros que se crearon
+            const botones = contenedor.getElementsByTagName('button');
+
+            for (let i = 0; i < botones.length; i++) {
+                const boton = botones[i];
+                // 3. Limpiamos el nombre del libro del botón
+                const nombreLibro = boton.textContent.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+                // 4. Si coincide, lo mostramos; si no, lo ocultamos
+                if (nombreLibro.includes(busqueda)) {
+                    boton.style.display = ""; // Vuelve a su estado original
+                } else {
+                    boton.style.display = "none"; // Se oculta
+                }
+            }
+        };
+    </script>
+    <div id="vista-voz" class="hidden">
+        <div class="voz-contenido">
+            <h2 id="estado-voz">Escuchando...</h2>
+            <div class="orbe-animado"></div>
+            <p id="subtexto-voz">Habla ahora, te escucho...</p>
+            <button onclick="VoiceMode.cerrar()" class="btn-cerrar-voz">Cancelar</button>
+        </div>
+    </div>
+
+    <script>
+        window.addEventListener('load', () => {
+            if (!window.__NOEMA_INIT_DONE && window.App && typeof App.init === 'function') {
+                try { App.init(); } catch (e) { console.error('❌ Fallback init:', e); }
+            }
+        }, { once: true });
+    </script>
+
+    <!-- LIGHTBOX PREMIUM -->
+    <div id="lightbox-premium">
+        <button class="btn-close-lightbox" onclick="App.cerrarLightbox()">×</button>
+        <div class="lightbox-img-container">
+            <div class="lightbox-image-wrapper">
+                <img id="img-lightbox-full" src="" class="lightbox-img">
+                <div class="lightbox-text-overlay">
+                    <p id="lbl-texto-full" class="lightbox-verse-text"></p>
+                    <span id="lbl-cita-full" class="lightbox-verse-ref"></span>
+                </div>
+            </div>
+            <div class="lightbox-actions">
+                <button class="btn-lightbox" onclick="App.descargarImagen()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                    Guardar
+                </button>
+                <button class="btn-lightbox primary" onclick="App.compartirImagen()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="18" cy="5" r="3"></circle>
+                        <circle cx="6" cy="12" r="3"></circle>
+                        <circle cx="18" cy="19" r="3"></circle>
+                        <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                        <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                    </svg>
+                    Compartir
+                </button>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
