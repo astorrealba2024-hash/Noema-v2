@@ -1,18 +1,21 @@
-﻿/* =========================================
+/* =========================================
    VARIABLES PREMIUM UI (CLARO / OSCURO)
    ========================================= */
 :root {
     /* MODO CLARO (Default) */
+    --bg: #f2f4f8;
     --bg-ui: #f2f4f8;
-    /* Fondo global mÃ¡s limpio */
+    --card: rgba(255, 255, 255, 0.75);
     --card-bg-ui: rgba(255, 255, 255, 0.75);
-    /* Transparencia Glassmorphism */
+    --text: #1c1c1e;
     --text-ui: #1c1c1e;
-    /* Texto casi negro */
+    --text-sec: #6c6c70;
     --text-sec-ui: #6c6c70;
-    /* Texto secundario gris */
+    --border: rgba(0, 0, 0, 0.05);
     --border-ui: rgba(0, 0, 0, 0.05);
+    --shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
     --shadow-ui: 0 8px 30px rgba(0, 0, 0, 0.08);
+    --primary: #8e44ad;
     --nav-bg-ui: rgba(255, 255, 255, 0.85);
     --timeline-line-ui: linear-gradient(to bottom, #d1d1d6 50%, rgba(255, 255, 255, 0) 0%);
     --timeline-node-border: #d1d1d6;
@@ -21,12 +24,19 @@
 
 body.dark {
     /* MODO OSCURO */
+    --bg: #121212;
     --bg-ui: #121212;
-    --card-bg-ui: rgba(44, 44, 46, 0.70);
+    --card: rgba(44, 44, 46, 0.85);
+    --card-bg-ui: rgba(44, 44, 46, 0.85);
+    --text: #ffffff;
     --text-ui: #ffffff;
+    --text-sec: #ebebf5;
     --text-sec-ui: #ebebf5;
+    --border: rgba(255, 255, 255, 0.1);
     --border-ui: rgba(255, 255, 255, 0.1);
+    --shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
     --shadow-ui: 0 10px 30px rgba(0, 0, 0, 0.4);
+    --primary: #8e44ad;
     --nav-bg-ui: rgba(26, 26, 26, 0.9);
     --timeline-line-ui: linear-gradient(to bottom, #48484a 50%, rgba(0, 0, 0, 0) 0%);
     --timeline-node-border: #636366;
