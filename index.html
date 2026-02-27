@@ -8,18 +8,20 @@
 
     <link rel="icon" type="image/png" href="icon-512.png?v=5">
     <link rel="apple-touch-icon" href="icon-512.png?v=5">
+    
     <script>
-        var version = "28"; // Incrementado para asegurar que cargue los cambios
-        document.write('<link rel="stylesheet" href="estilos.css?v=' + version + '">');
+        var version = "62"; // Subimos versión para limpiar caché
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = 'estilos.css?v=' + version;
+        document.head.appendChild(link);
     </script>
+    
     <link rel="manifest" href="manifest.json?v=5">
-
     <meta name="theme-color" content="#1a1a1a">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
-    <link
-        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lora:ital@0;1&family=Montserrat:wght@400;500;600;700;800&family=Oswald:wght@500&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lora:ital@0;1&family=Montserrat:wght@400;500;600;700;800&family=Oswald:wght@500&display=swap" rel="stylesheet">
 
     <script src="doctrinas.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -1362,24 +1364,6 @@
     </div>
 
     <script>
-        // Lista de archivos a cargar
-        var misArchivos = [
-            "biblia.js",
-            "PDT.js",
-            "TLA.js",
-            "app.js",
-            "ia.js",
-            "kerygma.js"
-        ];
-
-        // Este bucle escribe las etiquetas <script> con la versión automáticamente
-        misArchivos.forEach(function (archivo) {
-            document.write('<script src="' + archivo + '?v=' + version + '"><\/script>');
-        });
-    </script>
-    <script>
-        // SCRIPT AUTÓNOMO DEL EDITOR
-
         // GESTOS TÁCTILES CORREGIDOS Y ROBUSTOS
         (function () {
             function activarGestos(idPanel, funcionCerrar) {
@@ -1411,22 +1395,19 @@
                     panel.style.transition = 'transform 0.4s cubic-bezier(0.23, 1, 0.32, 1)';
                     const diff = currentY - startY;
 
-                    // Si ha bajado más de 80 píxeles, CERRAMOS de verdad
                     if (diff > 80) {
-                        panel.style.transform = `translateY(100%)`; // Forzamos que desaparezca visualmente
+                        panel.style.transform = `translateY(100%)`; 
                         setTimeout(() => {
-                            funcionCerrar(); // Ejecutamos la función que cierra el modal en tu app.js
-                            panel.style.transform = ''; // Reseteamos posición para la próxima vez
+                            funcionCerrar(); 
+                            panel.style.transform = ''; 
                         }, 300);
                     } else {
-                        panel.style.transform = ''; // Lo devolvemos a su lugar
+                        panel.style.transform = ''; 
                     }
                 });
             }
 
             window.addEventListener('load', () => {
-
-                // Activar gestos en Chat y Notas
                 activarGestos('panel-ia', () => {
                     if (typeof App !== 'undefined' && App.cerrarIA) App.cerrarIA();
                     else { document.getElementById('panel-ia').classList.remove('active'); document.getElementById('overlay').classList.add('hidden'); }
@@ -1442,34 +1423,28 @@
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js'));
         }
-        // Motor de búsqueda de libros corregido
-        // Importante: Selector se define en app.js, pero esto actúa de respaldo/parche
-        // si el objeto Selector ya existe o para agregarlo.
+
         window.Selector = window.Selector || {};
         window.Selector.filtrarLibros = function (query) {
             const contenedor = document.getElementById('lista-selector');
             if (!contenedor) return;
 
-            // 1. Limpiamos la búsqueda (minúsculas y sin tildes)
             const busqueda = query.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-
-            // 2. Buscamos TODOS los botones de libros que se crearon
             const botones = contenedor.getElementsByTagName('button');
 
             for (let i = 0; i < botones.length; i++) {
                 const boton = botones[i];
-                // 3. Limpiamos el nombre del libro del botón
                 const nombreLibro = boton.textContent.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
-                // 4. Si coincide, lo mostramos; si no, lo ocultamos
                 if (nombreLibro.includes(busqueda)) {
-                    boton.style.display = ""; // Vuelve a su estado original
+                    boton.style.display = ""; 
                 } else {
-                    boton.style.display = "none"; // Se oculta
+                    boton.style.display = "none"; 
                 }
             }
         };
     </script>
+
     <div id="vista-voz" class="hidden">
         <div class="voz-contenido">
             <h2 id="estado-voz">Escuchando...</h2>
@@ -1480,11 +1455,41 @@
     </div>
 
     <script>
-        window.addEventListener('load', () => {
-            if (!window.__NOEMA_INIT_DONE && window.App && typeof App.init === 'function') {
-                try { App.init(); } catch (e) { console.error('❌ Fallback init:', e); }
-            }
-        }, { once: true });
+        // NUEVO SISTEMA DE CARGA SEGURA PARA VERCEL
+        var misArchivos = [
+            "biblia.js",
+            "PDT.js",
+            "TLA.js",
+            "app.js",
+            "ia.js",
+            "kerygma.js"
+        ];
+
+        var scriptsCargados = 0;
+
+        misArchivos.forEach(function (archivo) {
+            var script = document.createElement('script');
+            script.src = archivo + '?v=' + version;
+            script.async = false; // Fuerza el orden cronológico
+            
+            script.onload = function() {
+                scriptsCargados++;
+                // Cuando cargue el último archivo, inicializamos la app
+                if (scriptsCargados === misArchivos.length) {
+                    if (!window.__NOEMA_INIT_DONE && typeof App !== 'undefined' && typeof App.init === 'function') {
+                        window.__NOEMA_INIT_DONE = true;
+                        try { App.init(); } catch (e) { console.error('❌ Error iniciando App:', e); }
+                    }
+                }
+            };
+            
+            script.onerror = function() {
+                console.error("❌ ERROR 404: No se pudo cargar " + archivo + ". Verifica que el nombre esté escrito exactamente igual (mayúsculas/minúsculas) en Vercel/Github.");
+                alert("Error cargando " + archivo + ". Revisa la consola.");
+            };
+            
+            document.body.appendChild(script);
+        });
     </script>
 
     <div id="lightbox-premium">
@@ -1511,6 +1516,7 @@
                         <circle cx="18" cy="5" r="3"></circle>
                         <circle cx="6" cy="12" r="3"></circle>
                         <circle cx="18" cy="19" r="3"></circle>
+                      
                         <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
                         <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
                     </svg>
