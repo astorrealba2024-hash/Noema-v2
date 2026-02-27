@@ -9,7 +9,7 @@
     <link rel="icon" type="image/png" href="icon-512.png?v=5">
     <link rel="apple-touch-icon" href="icon-512.png?v=5">
     <script>
-        var version = "27"; // Incrementado para asegurar que cargue los cambios
+        var version = "2"; // Incrementado para asegurar que cargue los cambios
         document.write('<link rel="stylesheet" href="estilos.css?v=' + version + '">');
     </script>
     <link rel="manifest" href="manifest.json?v=5">
@@ -105,7 +105,7 @@
             box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.1);
         }
 
-        body.dark-mode .glass-premium {
+        body.dark .glass-premium {
             background: rgba(28, 28, 30, 0.8) !important;
             border-top: 1px solid rgba(255, 255, 255, 0.08);
         }
@@ -285,7 +285,6 @@
 
             <div class="dashboard-container">
 
-                <!-- 1. HEADER SUPERIOR (Solo Iconos) -->
                 <header class="dashboard-top-bar">
                     <button class="icon-btn-header" onclick="Notificaciones.abrir()">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -301,32 +300,25 @@
 <img id="avatar-dashboard" class="avatar-header" src="" onclick="App.abrirMiEspacio()">
 </header>
 
-                <!-- 2. TARJETA PRINCIPAL (Saludo) -->
                 <div class="card-dashboard-main" onclick="App.abrirPerfil()">
                     <h1>Hola, <span id="saludo-usuario-dashboard">Usuario</span></h1>
                     <p id="fecha-dashboard">Exploremos las escrituras hoy</p>
                 </div>
 
-                <!-- 3. GRID TIMELINE (Solo conecta Pan Diario, Reflexión, Oración) -->
                 <div class="timeline-grid">
 
-                    <!-- COLUMNA TIMELINE (Izquierda) -->
                     <div class="timeline-col">
                         <div class="timeline-line"></div>
-                        <!-- Nodos específicos alineados -->
                         <div class="timeline-node node-1"></div>
                         <div class="timeline-node node-2"></div>
                         <div class="timeline-node node-3"></div>
                     </div>
 
-                    <!-- COLUMNA CONTENIDO (Derecha) -->
                     <div class="content-col">
 
-                        <!-- SECCIÓN PAN DIARIO -->
                         <div>
                             <h2 class="section-title" id="titulo-pan-diario">Pan diario</h2>
 
-                            <!-- Tarjeta Versículo -->
                             <div id="card-versiculo-dia" class="card-verse-day" onclick="App.abrirLecturaPanDiario()">
                                 <h3 id="ref-verso-dia">Oseas 2:14</h3>
                                 <p class="verse-text-anim" id="texto-verso-dia">"Pero he aquí que yo la atraeré y la
@@ -345,7 +337,6 @@
                             </div>
                         </div>
 
-                        <!-- Tarjeta Reflexión -->
                         <div class="card-reflection" onclick="App.mostrarReflexionCompleta()">
                             <div class="reflection-info">
                                 <h4>Reflexión del día</h4>
@@ -363,7 +354,6 @@
                                 class="reflection-img" alt="Reflexión">
                         </div>
 
-                        <!-- Tarjeta Oración (IMAGEN CORREGIDA) -->
                         <div class="card-reflection" onclick="App.abrirOracion()">
                             <img src="https://images.unsplash.com/photo-1491841550275-ad7854e35ca6?auto=format&fit=crop&q=80&w=150"
                                 class="reflection-img" style="margin-right: 15px; width: 60px; height: 60px;"
@@ -386,7 +376,6 @@
     </div>
 </div>
 
-                <!-- 5. TARJETA CREADOR (Design Studio) -->
                 <div class="card-creator" onclick="App.abrirCreadorPremium()">
                     <div class="creator-content">
                         <span class="creator-badge">Noema Studio</span>
@@ -404,13 +393,11 @@
                     </div>
                 </div>
 
-                <!-- 6. CARRUSEL VERSÍCULOS (Minimalista) -->
                 <div class="carousel-verses-container">
                     <div class="carousel-header">
                         <h3 class="carousel-title">Diseños del Día</h3>
                     </div>
                     <div class="carousel-verses">
-                        <!-- Item 1 -->
                         <div class="verse-card-item"
                             onclick="App.abrirImagenFull('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&q=80&w=800', 'Salmos 23:1', 'Jehová es mi pastor; nada me faltará.')">
                             <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&q=80&w=300"
@@ -421,7 +408,6 @@
                                 <p class="verse-text-mini"></p>
                             </div>
                         </div>
-                        <!-- Item 2 -->
                         <div class="verse-card-item"
                             onclick="App.abrirImagenFull('https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?auto=format&fit=crop&q=80&w=800', 'Filipenses 4:13', 'Todo lo puedo en Cristo que me fortalece.')">
                             <img src="https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?auto=format&fit=crop&q=80&w=300"
@@ -432,7 +418,6 @@
                                 <p class="verse-text-mini"></p>
                             </div>
                         </div>
-                        <!-- Item 3 -->
                         <div class="verse-card-item"
                             onclick="App.abrirImagenFull('https://images.unsplash.com/photo-1472214103451-9374bd1c798e?auto=format&fit=crop&q=80&w=800', 'Juan 3:16', 'Porque de tal manera amó Dios al mundo...')">
                             <img src="https://images.unsplash.com/photo-1472214103451-9374bd1c798e?auto=format&fit=crop&q=80&w=300"
@@ -446,19 +431,14 @@
                     </div>
                 </div>
 
-                <!-- Espacio final -->
                 <div style="height: 30px;"></div>
             </div>
         </section>
 
-        <!-- VISTA ORACION (STORIES) -->
         <div id="vista-oracion" class="stories-overlay" style="display: none;">
-            <!-- Barras de progreso -->
             <div class="stories-progress-container" id="stories-progress-bars">
-                <!-- Se inyectan dinámicamente -->
-            </div>
+                </div>
 
-            <!-- Cabecera simple -->
             <div class="stories-header">
                 <div class="stories-user-info">
                     <div
@@ -475,14 +455,11 @@
                 </button>
             </div>
 
-            <!-- Contenido Slide -->
             <div class="story-content-area" id="story-content-area">
-                <!-- Contenido dinámico -->
                 <h2 id="story-title" style="margin-bottom:20px; font-size:1.8rem;">Título</h2>
                 <p id="story-text" style="font-size:1.1rem; line-height:1.6;">Texto de la oración...</p>
             </div>
 
-            <!-- Zonas de toque para navegación -->
             <div class="story-touch-left" onclick="App.historiaAnterior()"></div>
             <div class="story-touch-right" onclick="App.siguienteHistoria()"></div>
         </div>
@@ -592,33 +569,24 @@
         </section>
     </div>
 
-    <!-- =========================================
-         PANEL NOTIFICACIONES (LATERAL DERECHO)
-         ========================================= -->
     <div id="panel-notificaciones" class="panel-lateral-derecho">
         <div class="panel-header-notif">
             <h3>Centro de Avisos</h3>
             <button onclick="Notificaciones.cerrar()">✕</button>
         </div>
         <div class="panel-content-notif" id="lista-notificaciones">
-            <!-- Inyectado por JS -->
-        </div>
+            </div>
     </div>
 
     <div id="overlay-notif" class="overlay-full hidden" onclick="Notificaciones.cerrar()"></div>
 
-    <!-- =========================================
-         MODAL MI ESPACIO (NUEVO PERFIL)
-         ========================================= -->
     <div id="modal-mi-espacio" class="modal-full hidden" style="z-index: 25000;">
         <div class="ios-header">
             <h2 class="ios-heading">Mi Espacio</h2>
-            <!-- Botón Cerrar eliminado por solicitud -->
-        </div>
+            </div>
 
         <div style="padding: 20px; flex: 1; overflow-y: auto;">
 
-            <!-- Perfil Card -->
             <div
                 style="background: var(--card); border-radius: 25px; padding: 25px; text-align: center; margin-bottom: 30px; border: 1px solid var(--border); box-shadow: var(--shadow);">
                 <img src="" id="avatar-mi-espacio"
@@ -629,7 +597,6 @@
                     style="padding: 10px 20px; font-size: 0.9rem; border-radius: 20px;">Editar Perfil</button>
             </div>
 
-            <!-- Menú de Accesos -->
             <div style="display: flex; flex-direction: column; gap: 15px;">
                 <button onclick="Resaltados.abrir()"
                     style="display: flex; align-items: center; padding: 18px; background: var(--card); border: 1px solid var(--border); border-radius: 18px; color: var(--text); font-weight: 600; cursor: pointer; gap: 15px;">
@@ -969,7 +936,7 @@
                 transform: scale(0.95);
             }
 
-            body.dark-mode .stepper-btn {
+            body.dark .stepper-btn {
                 background: #636366;
                 color: white;
             }
@@ -988,17 +955,34 @@
 
 
             <div class="premium-section-title">Visual</div>
-            <div class="premium-card-group">
-                <div class="premium-item" style="cursor: default;">
-                    <div style="display: flex; align-items: center;">
-                        <div class="premium-icon-box icon-purple">🌙</div>
-                        <span class="premium-title">Modo Oscuro</span>
-                    </div>
-                    <label class="switch-premium">
-                        <input type="checkbox" id="switch-modo-oscuro" onchange="App.toggleModoOscuro()">
-                        <span class="slider-premium"></span>
-                    </label>
-                </div>
+<div class="premium-card-group">
+    
+    <div class="premium-item" style="cursor: pointer;" onclick="App.toggleModoOscuro()">
+        <div style="display: flex; align-items: center;">
+            <div class="premium-icon-box icon-purple">🌙</div>
+            <span class="premium-title">Modo Oscuro</span>
+        </div>
+        <div class="switch-premium" style="pointer-events: none;">
+            <input type="checkbox" id="switch-modo-oscuro" tabindex="-1">
+            <span class="slider-premium"></span>
+        </div>
+    </div>
+    
+    <div class="premium-item" style="cursor: pointer;" onclick="App.toggleAutoNoche()">
+        <div style="display: flex; align-items: center;">
+            <div class="premium-icon-box icon-blue">⚡</div>
+            <div class="premium-item-text">
+                <span class="premium-title">Cambio Automático</span>
+                <span class="premium-subtitle">Activar modo noche a las 7:00 PM</span>
+            </div>
+        </div>
+        <div class="switch-premium" style="pointer-events: none;">
+            <input type="checkbox" id="switch-auto-noche" tabindex="-1">
+            <span class="slider-premium"></span>
+        </div>
+    </div>
+    
+</div>
                 <div class="premium-item" style="cursor: default;">
                     <div style="display: flex; align-items: center;">
                         <div class="premium-icon-box icon-blue">
@@ -1503,7 +1487,6 @@
         }, { once: true });
     </script>
 
-    <!-- LIGHTBOX PREMIUM -->
     <div id="lightbox-premium">
         <button class="btn-close-lightbox" onclick="App.cerrarLightbox()">×</button>
         <div class="lightbox-img-container">
