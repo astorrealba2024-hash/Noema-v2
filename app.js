@@ -52,15 +52,31 @@ const App = {
             const barraNav = document.querySelector('.bottom-nav');
             if (barraNav) barraNav.style.display = 'none';
             
-            // 1. Cargar Tema
-            const temaGuardado = localStorage.getItem('noema-tema');
-        if (temaGuardado) {
-            if (temaGuardado === 'oscuro') document.body.classList.add('dark');
-            else document.body.classList.remove('dark');
-        } else {
-            const hora = new Date().getHours();
-            if (hora >= 19 || hora < 6) document.body.classList.add('dark');
-        }
+            // --- LÓGICA DE TEMA INTELIGENTE (ACTUALIZADA) ---
+            const temaManual = localStorage.getItem('noema-tema');
+            const autoActivado = localStorage.getItem('noema-auto-noche') !== 'false'; // Por defecto es true
+            
+            if (autoActivado) {
+                // Si la automatización está encendida, manda la hora actual
+                const hora = new Date().getHours();
+                if (hora >= 19 || hora < 6) document.body.classList.add('dark');
+                else document.body.classList.remove('dark');
+            } else {
+                // Si está apagada, manda solo lo que el usuario eligió manualmente
+                if (temaManual === 'oscuro') document.body.classList.add('dark');
+                else document.body.classList.remove('dark');
+            }
+            
+            // Sincronizar los interruptores visuales un momento después de que cargue el DOM
+            setTimeout(() => {
+                const swModo = document.getElementById('switch-modo-oscuro');
+                const swAuto = document.getElementById('switch-auto-noche');
+                if (swModo) swModo.checked = document.body.classList.contains('dark');
+                if (swAuto) swAuto.checked = autoActivado;
+            }, 1000);
+            // -----------------------------------------------
+            
+            // (Aquí sigue el resto de tu código: Cargar Biblias, etc...)
 
         // --- NUEVO: CARGAR TAMAÑO DE BARRA ---
         App.cargarPreferenciasBarra();
@@ -349,11 +365,14 @@ mostrarFecha: () => {
     storyTimer: null,
     storyDuration: 5000, // 5 segundos por slide
 
-    // Abre el modo "Stories" para la oración
-    abrirOracion: () => {
+// Abre el modo "Stories" para la oración
+abrirOracion: () => {
+        // Registrar estado para que el botón atrás del teléfono funcione
+        history.pushState({ modal: 'oracion' }, "");
+        
         const pd = App.PanDiario;
         const slides = pd.oracion.slides || pd.slides;
-
+        
         if (!slides || slides.length === 0) return;
 
         App.storyIndex = 0;
@@ -529,17 +548,22 @@ mostrarFecha: () => {
     },
 
     // --- FUNCIONES DE ACTUALIZACIÓN (BEACON) ---
-    checkUpdate: () => {
-        const versionGuardada = localStorage.getItem('noema-version-instalada');
-
-        // Si la versión guardada es diferente a la del código actual...
-        if (versionGuardada !== App.version) {
-
-            // Inyectar HTML del Beacon si no existe
-            if (!document.getElementById('update-beacon')) {
-                const div = document.createElement('div');
-                div.id = 'update-beacon';
-                div.innerHTML = `
+    // --- FUNCIONES DE ACTUALIZACIÓN (BEACON) ---
+checkUpdate: () => {
+    const versionGuardada = localStorage.getItem('noema-version-instalada');
+    
+    // --- NUEVO: VERIFICAR QUE ESTAMOS EN INICIO ---
+    const vistaInicio = document.getElementById('vista-inicio');
+    const estamosEnInicio = vistaInicio && (vistaInicio.classList.contains('activa') || vistaInicio.style.display === 'block');
+    
+    // Si la versión es diferente Y el usuario está en la pantalla principal...
+    if (versionGuardada !== App.version && estamosEnInicio) {
+        
+        // Inyectar HTML del Beacon si no existe
+        if (!document.getElementById('update-beacon')) {
+            const div = document.createElement('div');
+            div.id = 'update-beacon';
+            div.innerHTML = `
                     <div class="beacon-icon">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
                     </div>
@@ -549,13 +573,13 @@ mostrarFecha: () => {
                     </div>
                     <button class="btn-beacon" onclick="App.irAActualizar()">ACTUALIZAR</button>
                 `;
-                document.body.appendChild(div);
-
-                // Animación de entrada
-                setTimeout(() => document.getElementById('update-beacon').classList.add('visible'), 100);
-            }
+            document.body.appendChild(div);
+            
+            // Animación de entrada
+            setTimeout(() => document.getElementById('update-beacon').classList.add('visible'), 100);
         }
-    },
+    }
+},
 
     irAActualizar: () => {
         const beacon = document.getElementById('update-beacon');
@@ -877,18 +901,19 @@ mostrarFecha: () => {
             else nuevaVista.style.display = 'block';
         }
 
-        // --- NUEVO: ACTUALIZAR BARRA INFERIOR ---
+        // --- NUEVO: OCULTAR BARRA AUTOMÁTICAMENTE ---
+        const bottomNav = document.querySelector('.bottom-nav');
+        if (bottomNav) {
+            if (idVista === 'vista-kerygma' || idVista === 'vista-setup') {
+                bottomNav.style.display = 'none'; // Oculta en Kerygma
+            } else if (idVista === 'vista-inicio' || idVista === 'vista-biblia') {
+                bottomNav.style.display = 'flex'; // Muestra en Inicio
+            }
+        }
+        // --------------------------------------------
+
         const navItems = document.querySelectorAll('.bottom-nav .nav-item');
         navItems.forEach(item => item.classList.remove('active'));
-
-        const bottomNav = document.querySelector('.bottom-nav');
-if (bottomNav) {
-    if (idVista === 'vista-inicio') {
-        bottomNav.style.display = 'flex'; // FORZAR APARICIÓN AL TERMINAR ANIMACIÓN
-    } else {
-        bottomNav.style.display = 'none';
-    }
-}
 
         let activeIndex = -1;
         if (idVista === 'vista-inicio') activeIndex = 0;
@@ -900,41 +925,107 @@ if (bottomNav) {
 
         if (idVista === 'vista-biblia') {
             if (typeof Lectura !== 'undefined') setTimeout(Lectura.render, 50);
-        } else {
-            const chatHistorial = document.getElementById('chat-historial');
-            if (chatHistorial) chatHistorial.innerHTML = '';
         }
-
+        
         App.cerrarTodo();
-        if (typeof Lectura !== 'undefined') Lectura.cerrarSeleccion();
         window.scrollTo(0, 0);
     },
 
-    toggleMenu: () => {
-        const menu = document.getElementById('menu-lateral');
-        if (menu) menu.classList.toggle('abierto');
-    },
+    cerrarIA: () => {
+        const panel = document.getElementById('panel-ia');
+        if (panel) panel.classList.remove('abierto');
 
-    toggleModoOscuro: () => {
-        document.body.classList.toggle('dark');
-        const esOscuro = document.body.classList.contains('dark');
-        localStorage.setItem('noema-tema', esOscuro ? 'oscuro' : 'claro');
-    },
+        // --- RESTAURAR BARRA CORRECTAMENTE ---
+        const bottomNav = document.querySelector('.bottom-nav');
+        const esInicio = document.getElementById('vista-inicio') && document.getElementById('vista-inicio').classList.contains('activa');
+        const esBiblia = document.getElementById('vista-biblia') && document.getElementById('vista-biblia').classList.contains('activa');
+        
+        if (bottomNav && (esInicio || esBiblia)) bottomNav.style.display = 'flex';
+        // -------------------------------------
 
-    toggleAjustes: () => {
-        const menu = document.getElementById('ajustes-texto');
-        if (menu) {
-            menu.classList.toggle('hidden');
-            if (!menu.classList.contains('hidden')) App.resetTimerAjustes();
+        if (typeof versiculoSeleccionado !== 'undefined' && !versiculoSeleccionado) {
+            const overlay = document.getElementById('overlay');
+            if (overlay) overlay.classList.add('hidden');
+        }
+
+        if (history.state && history.state.modal === 'ia') {
+            App.ignoreNextPop = true;
+            history.back();
         }
     },
 
-    resetTimerAjustes: () => {
-        if (App.ajustesTimer) clearTimeout(App.ajustesTimer);
-        App.ajustesTimer = setTimeout(() => {
-            const menu = document.getElementById('ajustes-texto');
-            if (menu) menu.classList.add('hidden');
-        }, 3000);
+    cerrarTodo: () => {
+        const barra = document.getElementById('barra-acciones');
+        if (barra) barra.classList.remove('visible');
+        App.cerrarIA();
+
+        // --- RESTAURAR BARRA POR SEGURIDAD ---
+        const bottomNav = document.querySelector('.bottom-nav');
+        const esInicio = document.getElementById('vista-inicio') && document.getElementById('vista-inicio').classList.contains('activa');
+        const esBiblia = document.getElementById('vista-biblia') && document.getElementById('vista-biblia').classList.contains('activa');
+        
+        if (bottomNav && (esInicio || esBiblia)) bottomNav.style.display = 'flex';
+        // -------------------------------------
+
+        if (typeof Lectura !== 'undefined') Lectura.cerrarSeleccion();
+
+        if (typeof versiculoSeleccionado !== 'undefined' && !versiculoSeleccionado) {
+            const overlay = document.getElementById('overlay');
+            if (overlay) overlay.classList.add('hidden');
+        }
+    },
+// --- NUEVAS FUNCIONES DE CONTROL DE NOCHE ---
+toggleModoOscuro: () => {
+        // Al tocar manualmente, apagamos la automatización para que no haya conflicto
+        localStorage.setItem('noema-auto-noche', 'false');
+        const swAuto = document.getElementById('switch-auto-noche');
+        if (swAuto) swAuto.checked = false;
+        
+        document.body.classList.toggle('dark');
+        const esOscuro = document.body.classList.contains('dark');
+        localStorage.setItem('noema-tema', esOscuro ? 'oscuro' : 'claro');
+        
+        const swModo = document.getElementById('switch-modo-oscuro');
+        if (swModo) swModo.checked = esOscuro;
+    },
+    
+    // --- NUEVAS FUNCIONES DE CONTROL DE NOCHE ---
+toggleModoOscuro: () => {
+        // 1. Apagamos el automático para que tú tengas el control
+        localStorage.setItem('noema-auto-noche', 'false');
+        const swAuto = document.getElementById('switch-auto-noche');
+        if (swAuto) swAuto.checked = false;
+        
+        // 2. Alternamos el color real de la app
+        document.body.classList.toggle('dark');
+        const esOscuro = document.body.classList.contains('dark');
+        localStorage.setItem('noema-tema', esOscuro ? 'oscuro' : 'claro');
+        
+        // 3. Movemos la bolita de la luna visualmente
+        const swModo = document.getElementById('switch-modo-oscuro');
+        if (swModo) swModo.checked = esOscuro;
+    },
+    
+    toggleAutoNoche: () => {
+        const swAuto = document.getElementById('switch-auto-noche');
+        if (!swAuto) return;
+        
+        // Invertimos el switch manualmente porque bloqueamos el click nativo
+        const nuevoEstado = !swAuto.checked;
+        swAuto.checked = nuevoEstado;
+        localStorage.setItem('noema-auto-noche', nuevoEstado);
+        
+        if (nuevoEstado) {
+            // Si SE ENCIENDE, aplica la hora
+            const hora = new Date().getHours();
+            if (hora >= 19 || hora < 6) document.body.classList.add('dark');
+            else document.body.classList.remove('dark');
+        }
+        // Si SE APAGA, no cambiamos el color (te deja la pantalla como está para que tú la cambies manual).
+        
+        // Sincronizar el switch de la luna
+        const swModo = document.getElementById('switch-modo-oscuro');
+        if (swModo) swModo.checked = document.body.classList.contains('dark');
     },
 
    abrirIA: () => {
@@ -2922,34 +3013,27 @@ window.onload = () => {
     if (window.history.state === null) history.pushState({ vista: 'vista-inicio' }, "");
 };
 
-window.onpopstate = function (event) {
+window.onpopstate = function(event) {
     if (typeof App !== 'undefined' && App.ignoreNextPop) { App.ignoreNextPop = false; return; }
-    if (typeof SplitScreen !== 'undefined' && SplitScreen.activo) { SplitScreen.cerrar(); return; }
-
-    // Manejo de Notas (Prioridad Alta)
-    const winNotas = document.getElementById('win-notas');
-    if (winNotas && !winNotas.classList.contains('hidden') && winNotas.style.display !== 'none') {
-        if (typeof Notas !== 'undefined') {
-            Notas.guardarFinal(true); // Guardar silenciosamente
-            Notas.cerrar(true); // true = fromPopstate (no hacer history.back de nuevo)
-        }
+    
+    // --- NUEVO: CERRAR ORACIÓN CON BOTÓN ATRÁS ---
+    const vistaOracion = document.getElementById('vista-oracion');
+    if (vistaOracion && vistaOracion.style.display !== 'none') {
+        if (typeof App !== 'undefined') App.cerrarOracion();
         return;
     }
-
+    // ---------------------------------------------
+    
     const modales = document.querySelectorAll('.modal-full:not(.hidden), .modal-centro:not(.hidden)');
     let cerrado = false;
     modales.forEach(m => {
         if (window.getComputedStyle(m).display !== 'none') {
             m.classList.add('hidden');
-            if (m.id === 'vista-kerygma') {
-                const ini = document.getElementById('vista-inicio');
-                if (ini) { ini.classList.add('activa'); ini.style.display = 'block'; }
-            }
             cerrado = true;
         }
     });
     if (cerrado) return;
-
+    
     const inicio = document.getElementById('vista-inicio');
     if (inicio && !inicio.classList.contains('activa') && typeof App !== 'undefined') {
         App.navegar('vista-inicio');
